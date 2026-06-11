@@ -189,3 +189,17 @@ export interface MediaItem {
   to: { name: string; params: { id: number } }
   badge?: string
 }
+
+// Movies/Serials ro'yxati uchun normalizatsiya qilingan element.
+export interface CollectionItem {
+  key: string
+  title: string
+  posterUrl: string | null
+  releaseYear: number | null
+  status: WatchStatus
+  imdbRating: number | null
+  kind: 'movie' | 'serial'
+  to: { name: string; params: { id: number } }
+}
+
+export type ViewMode = 'grid' | 'list'

@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
+import type { ViewMode } from '@/api/types'
 
 type Theme = 'light' | 'dark'
 
 const THEME_KEY = 'mt_theme'
+const VIEW_KEY = 'mt_view'
 
 function initialTheme(): Theme {
   const saved = localStorage.getItem(THEME_KEY) as Theme | null
@@ -11,8 +13,18 @@ function initialTheme(): Theme {
   return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 }
 
+function initialView(): ViewMode {
+  return localStorage.getItem(VIEW_KEY) === 'list' ? 'list' : 'grid'
+}
+
 export const useSettingsStore = defineStore('settings', () => {
   const theme = ref<Theme>(initialTheme())
+  const view = ref<ViewMode>(initialView())
+
+  function setView(value: ViewMode): void {
+    view.value = value
+    localStorage.setItem(VIEW_KEY, value)
+  }
 
   // Butun UI rangi `color-scheme` ga bog'liq — root da majburlaymiz.
   watch(
@@ -30,5 +42,5 @@ export const useSettingsStore = defineStore('settings', () => {
     theme.value = theme.value === 'dark' ? 'light' : 'dark'
   }
 
-  return { theme, toggle }
+  return { theme, view, toggle, setView }
 })
