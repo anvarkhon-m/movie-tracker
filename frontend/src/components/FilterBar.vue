@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
+import IconField from 'primevue/iconfield'
+import InputIcon from 'primevue/inputicon'
+import InputText from 'primevue/inputtext'
+import Select from 'primevue/select'
+import InputNumber from 'primevue/inputnumber'
+import Button from 'primevue/button'
 import type { ListFilter, WatchStatus } from '@/api/types'
 
 const emit = defineEmits<{ change: [filter: ListFilter] }>()
@@ -8,17 +14,21 @@ const { t } = useI18n()
 
 const statuses: WatchStatus[] = ['PLAN_TO_WATCH', 'WATCHING', 'COMPLETED', 'DROPPED']
 
-const state = reactive<{ search: string; status: '' | WatchStatus; genre: string; minRating: number | null }>({
-  search: '',
-  status: '',
-  genre: '',
-  minRating: null,
-})
+const statusOptions = computed(() =>
+  statuses.map((s) => ({ label: t(`status.${s}`), value: s })),
+)
+
+const state = reactive<{
+  search: string
+  status: WatchStatus | null
+  genre: string
+  minRating: number | null
+}>({ search: '', status: null, genre: '', minRating: null })
 
 function build(): ListFilter {
   return {
     search: state.search.trim() || undefined,
-    status: state.status || undefined,
+    status: state.status ?? undefined,
     genre: state.genre.trim() || undefined,
     minRating: state.minRating ?? undefined,
   }
@@ -37,7 +47,7 @@ function emitNow(): void {
 
 function reset(): void {
   state.search = ''
-  state.status = ''
+  state.status = null
   state.genre = ''
   state.minRating = null
   emitNow()
@@ -46,56 +56,49 @@ function reset(): void {
 
 <template>
   <div class="filter-bar">
-    <input
-      v-model="state.search"
-      class="search"
-      :placeholder="t('filter.search')"
-      @input="emitDebounced"
-    />
-    <select v-model="state.status" @change="emitNow">
-      <option value="">{{ t('filter.allStatuses') }}</option>
-      <option v-for="s in statuses" :key="s" :value="s">{{ t(`status.${s}`) }}</option>
-    </select>
-    <input
-      v-model="state.genre"
-      class="genre"
-      :placeholder="t('filter.genre')"
-      @input="emitDebounced"
-    />
-    <input
-      v-model.number="state.minRating"
-      class="rating"
-      type="number"
-      min="0"
-      max="10"
-      step="0.5"
-      :placeholder="t('filter.minRating')"
+    <IconField class="search">
+      <InputIcon class="pi pi-search" />
+      <InputText v-model="state.search" :placeholder="t('filter.search')" fluid @input="emitDebounced" />
+    </IconField>
+    <Select
+      v-model="state.status"
+      :options="statusOptions"
+      option-label="label"
+      option-value="value"
+      :placeholder="t('filter.allStatuses')"
+      show-clear
+      class="status"
       @change="emitNow"
     />
-    <button class="reset" @click="reset">{{ t('filter.reset') }}</button>
+    <InputText v-model="state.genre" :placeholder="t('filter.genre')" class="genre" @input="emitDebounced" />
+    <InputNumber
+      v-model="state.minRating"
+      :min="0"
+      :max="10"
+      :placeholder="t('filter.minRating')"
+      class="rating"
+      @blur="emitNow"
+    />
+    <Button :label="t('filter.reset')" severity="secondary" outlined @click="reset" />
   </div>
 </template>
 
 <style scoped>
 .filter-bar {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.6rem;
   flex-wrap: wrap;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.5rem;
   align-items: center;
 }
 .search {
   flex: 1;
-  min-width: 180px;
+  min-width: 200px;
 }
 .genre {
-  width: 130px;
+  width: 140px;
 }
 .rating {
-  width: 100px;
-}
-.reset {
-  background: transparent;
-  border: 1px solid rgba(128, 128, 128, 0.4);
+  width: 120px;
 }
 </style>

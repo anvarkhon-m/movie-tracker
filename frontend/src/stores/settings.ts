@@ -20,6 +20,8 @@ export const useSettingsStore = defineStore('settings', () => {
     (value) => {
       localStorage.setItem(THEME_KEY, value)
       document.documentElement.style.colorScheme = value
+      // PrimeVue Aura dark mode `.app-dark` klassi orqali ishlaydi.
+      document.documentElement.classList.toggle('app-dark', value === 'dark')
     },
     { immediate: true },
   )

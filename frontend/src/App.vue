@@ -5,21 +5,31 @@ import { useAuthStore } from '@/stores/auth'
 
 const { t } = useI18n()
 const auth = useAuthStore()
+
+const links = [
+  { to: '/', key: 'home', icon: 'pi-home' },
+  { to: '/movies', key: 'movies', icon: 'pi-video' },
+  { to: '/serials', key: 'serials', icon: 'pi-desktop' },
+  { to: '/watchlist', key: 'watchlist', icon: 'pi-bookmark' },
+  { to: '/favorites', key: 'favorites', icon: 'pi-star' },
+  { to: '/stats', key: 'stats', icon: 'pi-chart-bar' },
+  { to: '/discover', key: 'discover', icon: 'pi-search' },
+]
 </script>
 
 <template>
   <div class="app">
     <header v-if="auth.isAuthenticated" class="topbar">
+      <RouterLink to="/" class="brand">🎬 <span>Movie Tracker</span></RouterLink>
       <nav class="nav">
-        <RouterLink to="/">{{ t('nav.home') }}</RouterLink>
-        <RouterLink to="/movies">{{ t('nav.movies') }}</RouterLink>
-        <RouterLink to="/serials">{{ t('nav.serials') }}</RouterLink>
-        <RouterLink to="/watchlist">{{ t('nav.watchlist') }}</RouterLink>
-        <RouterLink to="/favorites">{{ t('nav.favorites') }}</RouterLink>
-        <RouterLink to="/stats">{{ t('nav.stats') }}</RouterLink>
-        <RouterLink to="/discover">{{ t('nav.discover') }}</RouterLink>
+        <RouterLink v-for="l in links" :key="l.to" :to="l.to" class="nav-link">
+          <i :class="['pi', l.icon]" />
+          <span>{{ t(`nav.${l.key}`) }}</span>
+        </RouterLink>
       </nav>
-      <RouterLink to="/profile" class="profile-link">{{ t('nav.profile') }}</RouterLink>
+      <RouterLink to="/profile" class="profile-link" :title="t('nav.profile')">
+        <i class="pi pi-user" />
+      </RouterLink>
     </header>
 
     <main class="content">
@@ -32,31 +42,84 @@ const auth = useAuthStore()
 .topbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.8rem 1.5rem;
-  border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+  gap: 1.5rem;
+  padding: 0.7rem 1.5rem;
+  background: var(--p-content-background);
+  border-bottom: 1px solid var(--p-content-border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
   flex-wrap: wrap;
+}
+.brand {
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--p-text-color);
+  white-space: nowrap;
+}
+.brand span {
+  background: linear-gradient(90deg, var(--p-primary-color), #a855f7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .nav {
   display: flex;
-  gap: 1.2rem;
+  gap: 0.3rem;
   flex-wrap: wrap;
+  flex: 1;
 }
-.nav a {
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: var(--p-border-radius-md, 8px);
+  font-size: 0.9rem;
   font-weight: 500;
+  color: var(--p-text-muted-color);
+  transition: background 0.15s, color 0.15s;
 }
-.nav a.router-link-active {
-  text-decoration: underline;
+.nav-link:hover {
+  background: var(--p-surface-100);
+  color: var(--p-text-color);
+}
+:global(.app-dark) .nav-link:hover {
+  background: var(--p-surface-800);
+}
+.nav-link.router-link-active {
+  color: var(--p-primary-color);
+  background: var(--p-primary-50);
+}
+:global(.app-dark) .nav-link.router-link-active {
+  background: color-mix(in srgb, var(--p-primary-color) 18%, transparent);
+}
+.nav-link i {
+  font-size: 0.95rem;
 }
 .profile-link {
-  font-weight: 600;
-  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--p-surface-100);
+  color: var(--p-text-color);
+}
+:global(.app-dark) .profile-link {
+  background: var(--p-surface-800);
 }
 .profile-link.router-link-active {
-  text-decoration: underline;
+  background: var(--p-primary-color);
+  color: var(--p-primary-contrast-color, #fff);
 }
 .content {
   padding: 1.5rem;
+}
+@media (max-width: 720px) {
+  .nav-link span {
+    display: none;
+  }
 }
 </style>
