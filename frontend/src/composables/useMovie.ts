@@ -1,6 +1,11 @@
 import { ref } from 'vue'
 import client from '@/api/client'
-import type { MovieResponse, WatchHistoryRequest, WatchHistoryResponse } from '@/api/types'
+import type {
+  MovieRequest,
+  MovieResponse,
+  WatchHistoryRequest,
+  WatchHistoryResponse,
+} from '@/api/types'
 
 export function useMovie() {
   const movie = ref<MovieResponse | null>(null)
@@ -36,9 +41,14 @@ export function useMovie() {
     await load(id)
   }
 
+  async function updateMovie(id: number, payload: MovieRequest): Promise<void> {
+    await client.put(`/movies/${id}`, payload)
+    await load(id)
+  }
+
   async function removeMovie(id: number): Promise<void> {
     await client.delete(`/movies/${id}`)
   }
 
-  return { movie, history, loading, error, load, addWatch, deleteWatch, removeMovie }
+  return { movie, history, loading, error, load, addWatch, deleteWatch, updateMovie, removeMovie }
 }

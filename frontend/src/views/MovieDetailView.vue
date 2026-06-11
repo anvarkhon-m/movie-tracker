@@ -1,15 +1,56 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useMovie } from '@/composables/useMovie'
+import type { WatchStatus } from '@/api/types'
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-const { movie, history, loading, error, load, addWatch, deleteWatch, removeMovie } = useMovie()
+const { movie, history, loading, error, load, addWatch, deleteWatch, updateMovie, removeMovie } =
+  useMovie()
 
 const id = computed(() => Number(route.params.id))
+
+const STATUSES: WatchStatus[] = ['PLAN_TO_WATCH', 'WATCHING', 'COMPLETED', 'DROPPED']
+const editing = ref(false)
+const edit = reactive<{
+  personalRating: number | null
+  status: WatchStatus
+  platform: string
+  personalNote: string
+}>({ personalRating: null, status: 'PLAN_TO_WATCH', platform: '', personalNote: '' })
+
+function startEdit(): void {
+  if (!movie.value) return
+  edit.personalRating = movie.value.personalRating
+  edit.status = movie.value.status
+  edit.platform = movie.value.platform ?? ''
+  edit.personalNote = movie.value.personalNote ?? ''
+  editing.value = true
+}
+
+async function saveEdit(): Promise<void> {
+  if (!movie.value) return
+  const m = movie.value
+  await updateMovie(id.value, {
+    title: m.title,
+    releaseYear: m.releaseYear,
+    genres: m.genres,
+    director: m.director,
+    imdbRating: m.imdbRating,
+    personalRating: edit.personalRating,
+    durationMin: m.durationMin,
+    platform: edit.platform || null,
+    watchUrl: m.watchUrl,
+    status: edit.status,
+    personalNote: edit.personalNote || null,
+    language: m.language,
+    country: m.country,
+  })
+  editing.value = false
+}
 
 const today = new Date().toISOString().slice(0, 10)
 const form = reactive<{ watchedAt: string; platform: string; note: string }>({
@@ -88,7 +129,31 @@ async function onDeleteMovie(): Promise<void> {
 
           <p v-if="movie.personalNote" class="note">{{ movie.personalNote }}</p>
 
-          <button class="danger" @click="onDeleteMovie">{{ t('detail.delete') }}</button>
+          <div v-if="!editing" class="actions">
+            <button @click="startEdit">{{ t('edit.edit') }}</button>
+            <button class="danger" @click="onDeleteMovie">{{ t('detail.delete') }}</button>
+          </div>
+
+          <form v-else class="edit-form" @submit.prevent="saveEdit">
+            <label>{{ t('edit.status') }}
+              <select v-model="edit.status">
+                <option v-for="s in STATUSES" :key="s" :value="s">{{ t(`status.${s}`) }}</option>
+              </select>
+            </label>
+            <label>{{ t('edit.personalRating') }}
+              <input v-model.number="edit.personalRating" type="number" min="0" max="10" step="0.5" />
+            </label>
+            <label>{{ t('edit.platform') }}
+              <input v-model="edit.platform" />
+            </label>
+            <label>{{ t('edit.note') }}
+              <textarea v-model="edit.personalNote" rows="3"></textarea>
+            </label>
+            <div class="actions">
+              <button type="submit">{{ t('edit.save') }}</button>
+              <button type="button" class="ghost" @click="editing = false">{{ t('edit.cancel') }}</button>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -193,6 +258,36 @@ async function onDeleteMovie(): Promise<void> {
 }
 .danger {
   background: #b53737;
+}
+.actions {
+  display: flex;
+  gap: 0.6rem;
+}
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 360px;
+}
+.edit-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+.edit-form textarea {
+  resize: vertical;
+  font: inherit;
+  border-radius: 6px;
+  border: 1px solid rgba(128, 128, 128, 0.4);
+  background: transparent;
+  color: inherit;
+  padding: 0.4rem;
+}
+.ghost {
+  background: transparent;
+  border: 1px solid rgba(128, 128, 128, 0.4);
 }
 .history {
   margin-top: 2.5rem;

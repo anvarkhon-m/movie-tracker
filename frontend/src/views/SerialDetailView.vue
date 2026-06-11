@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useSerial } from '@/composables/useSerial'
+import type { SerialStatus, WatchStatus } from '@/api/types'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -16,10 +17,61 @@ const {
   addEpisode,
   deleteEpisode,
   markEpisodeWatched,
+  updateSerial,
   removeSerial,
 } = useSerial()
 
 const id = computed(() => Number(route.params.id))
+
+const WATCH_STATUSES: WatchStatus[] = ['PLAN_TO_WATCH', 'WATCHING', 'COMPLETED', 'DROPPED']
+const SERIAL_STATUSES: SerialStatus[] = ['ONGOING', 'ENDED', 'CANCELLED']
+const editing = ref(false)
+const edit = reactive<{
+  personalRating: number | null
+  watchStatus: WatchStatus
+  serialStatus: SerialStatus
+  platform: string
+  personalNote: string
+}>({
+  personalRating: null,
+  watchStatus: 'PLAN_TO_WATCH',
+  serialStatus: 'ONGOING',
+  platform: '',
+  personalNote: '',
+})
+
+function startEdit(): void {
+  if (!serial.value) return
+  edit.personalRating = serial.value.personalRating
+  edit.watchStatus = serial.value.watchStatus
+  edit.serialStatus = serial.value.serialStatus ?? 'ONGOING'
+  edit.platform = serial.value.platform ?? ''
+  edit.personalNote = serial.value.personalNote ?? ''
+  editing.value = true
+}
+
+async function saveEdit(): Promise<void> {
+  if (!serial.value) return
+  const s = serial.value
+  await updateSerial(id.value, {
+    title: s.title,
+    releaseYear: s.releaseYear,
+    genres: s.genres,
+    director: s.director,
+    imdbRating: s.imdbRating,
+    personalRating: edit.personalRating,
+    seasonCount: s.seasonCount,
+    episodeCount: s.episodeCount,
+    platform: edit.platform || null,
+    watchUrl: s.watchUrl,
+    serialStatus: edit.serialStatus,
+    watchStatus: edit.watchStatus,
+    personalNote: edit.personalNote || null,
+    language: s.language,
+    country: s.country,
+  })
+  editing.value = false
+}
 
 const form = reactive<{ seasonNo: number; episodeNo: number; title: string; durationMin: number | null }>({
   seasonNo: 1,
@@ -99,7 +151,36 @@ async function onDeleteSerial(): Promise<void> {
 
           <p v-if="serial.personalNote" class="note">{{ serial.personalNote }}</p>
 
-          <button class="danger" @click="onDeleteSerial">{{ t('serialDetail.delete') }}</button>
+          <div v-if="!editing" class="actions">
+            <button @click="startEdit">{{ t('edit.edit') }}</button>
+            <button class="danger" @click="onDeleteSerial">{{ t('serialDetail.delete') }}</button>
+          </div>
+
+          <form v-else class="edit-form" @submit.prevent="saveEdit">
+            <label>{{ t('edit.status') }}
+              <select v-model="edit.watchStatus">
+                <option v-for="s in WATCH_STATUSES" :key="s" :value="s">{{ t(`status.${s}`) }}</option>
+              </select>
+            </label>
+            <label>{{ t('edit.serialStatus') }}
+              <select v-model="edit.serialStatus">
+                <option v-for="s in SERIAL_STATUSES" :key="s" :value="s">{{ t(`serialStatus.${s}`) }}</option>
+              </select>
+            </label>
+            <label>{{ t('edit.personalRating') }}
+              <input v-model.number="edit.personalRating" type="number" min="0" max="10" step="0.5" />
+            </label>
+            <label>{{ t('edit.platform') }}
+              <input v-model="edit.platform" />
+            </label>
+            <label>{{ t('edit.note') }}
+              <textarea v-model="edit.personalNote" rows="3"></textarea>
+            </label>
+            <div class="actions">
+              <button type="submit">{{ t('edit.save') }}</button>
+              <button type="button" class="ghost" @click="editing = false">{{ t('edit.cancel') }}</button>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -220,6 +301,36 @@ async function onDeleteSerial(): Promise<void> {
 }
 .danger {
   background: #b53737;
+}
+.actions {
+  display: flex;
+  gap: 0.6rem;
+}
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 360px;
+}
+.edit-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+.edit-form textarea {
+  resize: vertical;
+  font: inherit;
+  border-radius: 6px;
+  border: 1px solid rgba(128, 128, 128, 0.4);
+  background: transparent;
+  color: inherit;
+  padding: 0.4rem;
+}
+.ghost {
+  background: transparent;
+  border: 1px solid rgba(128, 128, 128, 0.4);
 }
 .episodes {
   margin-top: 2.5rem;

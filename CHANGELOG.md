@@ -168,10 +168,24 @@
   - POST /serials {tmdbId:1396} → Breaking Bad (5 fasl, 62 epizod, ENDED), poster MinIO da
   - POST episode → POST episode history → GET: watched=true (isWatched domain logikasi)
 
+---
+
+## 2026-06-11 — Session 6: Filter UI, Statistika sahifa, inline tahrir
+
+### Qilinganlar
+- **Filter/search UI:** `FilterBar` komponenti (debounced search, status, janr, min reyting, reset),
+  MoviesView + SerialsView ga ulandi, `useSerials` filtr parametrlari kengaytirildi
+- **Statistika sahifa (`/stats`):** `useStats` + `StatsView` — summary kartalar + CSS bar chart lar
+  (status taqsimoti, top janrlar, yillar bo'yicha ko'rishlar), zero-dependency `BarChart` komponenti
+- **Inline tahrir:** Movie va Serial detail sahifalarida shaxsiy maydonlar (baho, status,
+  serial holati, platforma, izoh) tahrirlanadi — to'liq PUT yuboriladi
+- Jonli sinov: PUT movie personalRating=9.0 → /stats averageMovieRating=9.0 (to'liq loop tasdiqlandi)
+
 ### Keyingi session uchun
-- [ ] Filter/search UI (movies + serials)
-- [ ] Statistics sahifa (`/stats` dan grafiklar)
-- [ ] Detail: shaxsiy baho/status/izoh tahrirlash (hozir faqat ko'rsatiladi)
+- [ ] Watchlist / Favorites / Discover-da serial qo'shish sahifalari (route lar mavjud emas)
+- [ ] Dark mode toggle
+- [ ] Pagination UI (hozir faqat birinchi 20 ta)
+- [ ] Backend: service-layer testlarni kengaytirish
 
 ---
 

@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 import client from '@/api/client'
-import type { EpisodeRequest, EpisodeResponse, SerialResponse } from '@/api/types'
+import type { EpisodeRequest, EpisodeResponse, SerialRequest, SerialResponse } from '@/api/types'
 
 interface SeasonGroup {
   season: number
@@ -64,6 +64,11 @@ export function useSerial() {
     await loadEpisodes(id)
   }
 
+  async function updateSerial(id: number, payload: SerialRequest): Promise<void> {
+    await client.put(`/serials/${id}`, payload)
+    await load(id)
+  }
+
   async function removeSerial(id: number): Promise<void> {
     await client.delete(`/serials/${id}`)
   }
@@ -78,6 +83,7 @@ export function useSerial() {
     addEpisode,
     deleteEpisode,
     markEpisodeWatched,
+    updateSerial,
     removeSerial,
   }
 }
