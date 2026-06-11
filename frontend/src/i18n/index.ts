@@ -27,6 +27,12 @@ const messages = {
       minRating: 'Min reyting',
       reset: 'Tozalash',
     },
+    home: {
+      greeting: 'Salom',
+      continueWatching: 'Ko\'rishda davom eting',
+      nothingWatching: 'Hozir ko\'rilayotgan kontent yo\'q',
+      goDiscover: 'TMDB dan topish →',
+    },
     status: {
       PLAN_TO_WATCH: 'Rejada',
       WATCHING: 'Ko\'rilmoqda',
@@ -145,6 +151,12 @@ const messages = {
       minRating: 'Мин рейтинг',
       reset: 'Сбросить',
     },
+    home: {
+      greeting: 'Привет',
+      continueWatching: 'Продолжить просмотр',
+      nothingWatching: 'Сейчас ничего не смотрится',
+      goDiscover: 'Найти в TMDB →',
+    },
     status: {
       PLAN_TO_WATCH: 'В планах',
       WATCHING: 'Смотрю',
@@ -262,6 +274,12 @@ const messages = {
       genre: 'Genre',
       minRating: 'Min rating',
       reset: 'Reset',
+    },
+    home: {
+      greeting: 'Hi',
+      continueWatching: 'Continue watching',
+      nothingWatching: 'Nothing in progress right now',
+      goDiscover: 'Discover on TMDB →',
     },
     status: {
       PLAN_TO_WATCH: 'Plan to watch',
