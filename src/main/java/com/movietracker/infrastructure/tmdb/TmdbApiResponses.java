@@ -74,9 +74,14 @@ public final class TmdbApiResponses {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
+    public record ExternalIds(@JsonProperty("imdb_id") String imdbId) {
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public record MovieDetailsResponse(
             Integer id,
             String title,
+            @JsonProperty("imdb_id") String imdbId,
             @JsonProperty("release_date") String releaseDate,
             Integer runtime,
             List<Genre> genres,
@@ -104,6 +109,7 @@ public final class TmdbApiResponses {
             @JsonProperty("production_countries") List<ProductionCountry> productionCountries,
             String overview,
             @JsonProperty("created_by") List<Creator> createdBy,
+            @JsonProperty("external_ids") ExternalIds externalIds,
             Credits credits
     ) {
     }

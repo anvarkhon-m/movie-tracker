@@ -75,7 +75,7 @@ public class TmdbClient {
         try {
             return restClient.get()
                     .uri(uri -> uri.path("/tv/{id}")
-                            .queryParam("append_to_response", "credits")
+                            .queryParam("append_to_response", "credits,external_ids")
                             .queryParam(API_KEY_PARAM, properties.apiKey())
                             .build(tmdbId))
                     .retrieve()

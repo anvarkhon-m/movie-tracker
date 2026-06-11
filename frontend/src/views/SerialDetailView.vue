@@ -18,10 +18,22 @@ const {
   deleteEpisode,
   markEpisodeWatched,
   updateSerial,
+  refreshRating,
   removeSerial,
 } = useSerial()
 
 const id = computed(() => Number(route.params.id))
+
+const refreshingRating = ref(false)
+
+async function onRefreshRating(): Promise<void> {
+  refreshingRating.value = true
+  try {
+    await refreshRating(id.value)
+  } finally {
+    refreshingRating.value = false
+  }
+}
 
 const WATCH_STATUSES: WatchStatus[] = ['PLAN_TO_WATCH', 'WATCHING', 'COMPLETED', 'DROPPED']
 const SERIAL_STATUSES: SerialStatus[] = ['ONGOING', 'ENDED', 'CANCELLED']
@@ -139,9 +151,20 @@ async function onDeleteSerial(): Promise<void> {
               <dt>{{ t('serialDetail.episodesCount') }}</dt>
               <dd>{{ serial.episodeCount }}</dd>
             </template>
-            <template v-if="serial.imdbRating != null">
+            <template v-if="serial.imdbRating != null || serial.tmdbId != null">
               <dt>{{ t('detail.imdb') }}</dt>
-              <dd>⭐ {{ serial.imdbRating }}</dd>
+              <dd class="imdb">
+                <span>{{ serial.imdbRating != null ? `⭐ ${serial.imdbRating}` : '—' }}</span>
+                <button
+                  v-if="serial.tmdbId != null"
+                  class="refresh"
+                  :disabled="refreshingRating"
+                  :title="t('detail.refreshRating')"
+                  @click="onRefreshRating"
+                >
+                  {{ refreshingRating ? '…' : '⟳' }}
+                </button>
+              </dd>
             </template>
             <template v-if="serial.personalRating != null">
               <dt>{{ t('detail.personal') }}</dt>
@@ -293,6 +316,18 @@ async function onDeleteSerial(): Promise<void> {
 }
 .facts dd {
   margin: 0;
+}
+.imdb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.refresh {
+  background: transparent;
+  border: 1px solid rgba(128, 128, 128, 0.4);
+  padding: 0.1rem 0.4rem;
+  font-size: 0.9rem;
+  line-height: 1;
 }
 .note {
   font-style: italic;

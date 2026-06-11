@@ -30,6 +30,10 @@ tmdb:
   base-url: https://api.themoviedb.org/3
   image-base-url: https://image.tmdb.org/t/p/w500
 
+omdb:
+  api-key: ${OMDB_API_KEY:}
+  base-url: https://www.omdbapi.com
+
 minio:
   endpoint: ${MINIO_ENDPOINT:http://localhost:9100}
   access-key: ${MINIO_ACCESS_KEY:minioadmin}

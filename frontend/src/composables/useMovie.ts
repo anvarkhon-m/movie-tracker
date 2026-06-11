@@ -46,9 +46,25 @@ export function useMovie() {
     await load(id)
   }
 
+  async function refreshRating(id: number): Promise<void> {
+    const { data } = await client.post<MovieResponse>(`/movies/${id}/refresh-rating`)
+    movie.value = data
+  }
+
   async function removeMovie(id: number): Promise<void> {
     await client.delete(`/movies/${id}`)
   }
 
-  return { movie, history, loading, error, load, addWatch, deleteWatch, updateMovie, removeMovie }
+  return {
+    movie,
+    history,
+    loading,
+    error,
+    load,
+    addWatch,
+    deleteWatch,
+    updateMovie,
+    refreshRating,
+    removeMovie,
+  }
 }

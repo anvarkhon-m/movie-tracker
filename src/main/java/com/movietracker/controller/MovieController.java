@@ -60,6 +60,11 @@ public class MovieController {
         movieService.delete(id);
     }
 
+    @PostMapping("/{id}/refresh-rating")
+    public MovieResponse refreshRating(@PathVariable Long id) {
+        return movieService.refreshImdbRating(id);
+    }
+
     // --- Watch history ---
 
     @GetMapping("/{id}/history")

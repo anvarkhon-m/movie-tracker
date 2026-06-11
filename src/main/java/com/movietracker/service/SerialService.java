@@ -91,6 +91,17 @@ public class SerialService {
         serialRepository.delete(findOwned(id));
     }
 
+    @Transactional
+    public SerialResponse refreshImdbRating(Long id) {
+        Serial serial = findOwned(id);
+        if (serial.getTmdbId() == null) {
+            throw new BadRequestException("Bu serial TMDB bilan bog'lanmagan — reyting yangilanmaydi");
+        }
+        TmdbSerialDetails details = tmdbFacade.getSerialDetails(serial.getTmdbId());
+        serial.refreshImdbRating(details.imdbRating());
+        return serialMapper.toResponse(serial);
+    }
+
     // --- Epizodlar ---
 
     @Transactional(readOnly = true)

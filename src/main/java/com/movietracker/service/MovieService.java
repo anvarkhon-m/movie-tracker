@@ -88,6 +88,17 @@ public class MovieService {
         movieRepository.delete(findOwned(id));
     }
 
+    @Transactional
+    public MovieResponse refreshImdbRating(Long id) {
+        Movie movie = findOwned(id);
+        if (movie.getTmdbId() == null) {
+            throw new BadRequestException("Bu kino TMDB bilan bog'lanmagan — reyting yangilanmaydi");
+        }
+        TmdbMovieDetails details = tmdbFacade.getMovieDetails(movie.getTmdbId());
+        movie.refreshImdbRating(details.imdbRating());
+        return movieMapper.toResponse(movie);
+    }
+
     @Transactional(readOnly = true)
     public List<WatchHistoryResponse> getHistory(Long id) {
         return watchHistoryMapper.toMovieHistoryResponseList(findOwned(id).getWatchHistory());

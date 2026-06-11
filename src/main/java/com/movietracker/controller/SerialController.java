@@ -60,6 +60,11 @@ public class SerialController {
         serialService.delete(id);
     }
 
+    @PostMapping("/{id}/refresh-rating")
+    public SerialResponse refreshRating(@PathVariable Long id) {
+        return serialService.refreshImdbRating(id);
+    }
+
     // --- Epizodlar ---
 
     @GetMapping("/{id}/episodes")

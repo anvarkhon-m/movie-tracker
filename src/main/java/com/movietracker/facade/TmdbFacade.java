@@ -35,6 +35,7 @@ public class TmdbFacade {
 
     private final TmdbClient tmdbClient;
     private final TmdbProperties properties;
+    private final com.movietracker.infrastructure.omdb.OmdbClient omdbClient;
 
     public List<TmdbMovieSummary> searchMovies(String query) {
         return tmdbClient.searchMovies(query).results().stream()
@@ -68,7 +69,7 @@ public class TmdbFacade {
                 parseYear(details.releaseDate()),
                 genreNames(details.genres()),
                 director(details.credits()),
-                toRating(details.voteAverage()),
+                imdbRating(details.imdbId(), details.voteAverage()),
                 details.runtime(),
                 details.posterPath(),
                 posterUrl(details.posterPath()),
@@ -85,7 +86,7 @@ public class TmdbFacade {
                 parseYear(details.firstAirDate()),
                 genreNames(details.genres()),
                 creator(details.createdBy(), details.credits()),
-                toRating(details.voteAverage()),
+                imdbRating(imdbId(details.externalIds()), details.voteAverage()),
                 details.numberOfSeasons(),
                 details.numberOfEpisodes(),
                 toSerialStatus(details.status()),
@@ -116,6 +117,17 @@ public class TmdbFacade {
             return null;
         }
         return BigDecimal.valueOf(voteAverage).setScale(1, RoundingMode.HALF_UP);
+    }
+
+    /**
+     * Haqiqiy IMDb reytingi (OMDb orqali). Topilmasa — TMDB vote_average ga fallback.
+     */
+    private BigDecimal imdbRating(String imdbId, Double voteAverage) {
+        return omdbClient.getImdbRating(imdbId).orElseGet(() -> toRating(voteAverage));
+    }
+
+    private String imdbId(com.movietracker.infrastructure.tmdb.TmdbApiResponses.ExternalIds externalIds) {
+        return externalIds != null ? externalIds.imdbId() : null;
     }
 
     private String posterUrl(String posterPath) {

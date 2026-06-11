@@ -189,6 +189,21 @@
 
 ---
 
+## 2026-06-11 — Session 7: Haqiqiy IMDb reyting (OMDb) + refresh
+
+### Qilinganlar
+- **Muammo:** `imdbRating` aslida TMDB `vote_average` edi — Google/IMDb bilan mos kelmasdi
+- **OMDb integratsiyasi:** TMDB dan `imdb_id` (movie) / `external_ids.imdb_id` (serial) olinadi,
+  OMDb orqali haqiqiy IMDb reytingi olinadi (`OmdbClient`, `OmdbProperties`)
+  - TMDB facade endi `imdbRating(imdbId, voteAverage)` — OMDb topsa real IMDb, topmasa TMDB ga fallback
+  - `OMDB_API_KEY` env orqali (`.env` da, commit qilinmaydi)
+- **Refresh rating:** `POST /api/v1/movies/{id}/refresh-rating` va `/serials/{id}/refresh-rating`
+  - Domain: `refreshImdbRating()`; Service tmdbId orqali qayta oladi
+  - Frontend: detail sahifalarda IMDb yonida ⟳ tugma (null bo'lsa ham TMDB-linked bo'lsa ko'rinadi)
+- Sinov: OMDb tt1375666 → 8.8 (Google bilan mos)
+
+---
+
 <!-- 
 Keyingi session shablon:
 

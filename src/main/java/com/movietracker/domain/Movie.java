@@ -170,6 +170,10 @@ public class Movie {
         this.posterUrl = posterUrl;
     }
 
+    public void refreshImdbRating(BigDecimal imdbRating) {
+        this.imdbRating = imdbRating;
+    }
+
     public boolean belongsTo(Long userId) {
         return user != null && user.getId().equals(userId);
     }

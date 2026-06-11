@@ -69,6 +69,11 @@ export function useSerial() {
     await load(id)
   }
 
+  async function refreshRating(id: number): Promise<void> {
+    const { data } = await client.post<SerialResponse>(`/serials/${id}/refresh-rating`)
+    serial.value = data
+  }
+
   async function removeSerial(id: number): Promise<void> {
     await client.delete(`/serials/${id}`)
   }
@@ -84,6 +89,7 @@ export function useSerial() {
     deleteEpisode,
     markEpisodeWatched,
     updateSerial,
+    refreshRating,
     removeSerial,
   }
 }

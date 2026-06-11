@@ -56,6 +56,7 @@ const messages = {
       watchCount: 'Necha marta ko\'rilgan',
       delete: 'Kinoni o\'chirish',
       deleteConfirm: 'Bu kino o\'chirilsinmi?',
+      refreshRating: 'IMDb reytingini yangilash',
     },
     history: {
       title: 'Ko\'rish tarixi',
@@ -169,6 +170,7 @@ const messages = {
       watchCount: 'Просмотров',
       delete: 'Удалить фильм',
       deleteConfirm: 'Удалить этот фильм?',
+      refreshRating: 'Обновить рейтинг IMDb',
     },
     history: {
       title: 'История просмотров',
@@ -282,6 +284,7 @@ const messages = {
       watchCount: 'Times watched',
       delete: 'Delete movie',
       deleteConfirm: 'Delete this movie?',
+      refreshRating: 'Refresh IMDb rating',
     },
     history: {
       title: 'Watch history',

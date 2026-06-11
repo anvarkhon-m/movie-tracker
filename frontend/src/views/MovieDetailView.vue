@@ -8,8 +8,29 @@ import type { WatchStatus } from '@/api/types'
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-const { movie, history, loading, error, load, addWatch, deleteWatch, updateMovie, removeMovie } =
-  useMovie()
+const {
+  movie,
+  history,
+  loading,
+  error,
+  load,
+  addWatch,
+  deleteWatch,
+  updateMovie,
+  refreshRating,
+  removeMovie,
+} = useMovie()
+
+const refreshingRating = ref(false)
+
+async function onRefreshRating(): Promise<void> {
+  refreshingRating.value = true
+  try {
+    await refreshRating(id.value)
+  } finally {
+    refreshingRating.value = false
+  }
+}
 
 const id = computed(() => Number(route.params.id))
 
@@ -113,9 +134,20 @@ async function onDeleteMovie(): Promise<void> {
               <dt>{{ t('detail.director') }}</dt>
               <dd>{{ movie.director }}</dd>
             </template>
-            <template v-if="movie.imdbRating != null">
+            <template v-if="movie.imdbRating != null || movie.tmdbId != null">
               <dt>{{ t('detail.imdb') }}</dt>
-              <dd>⭐ {{ movie.imdbRating }}</dd>
+              <dd class="imdb">
+                <span>{{ movie.imdbRating != null ? `⭐ ${movie.imdbRating}` : '—' }}</span>
+                <button
+                  v-if="movie.tmdbId != null"
+                  class="refresh"
+                  :disabled="refreshingRating"
+                  :title="t('detail.refreshRating')"
+                  @click="onRefreshRating"
+                >
+                  {{ refreshingRating ? '…' : '⟳' }}
+                </button>
+              </dd>
             </template>
             <template v-if="movie.personalRating != null">
               <dt>{{ t('detail.personal') }}</dt>
@@ -250,6 +282,18 @@ async function onDeleteMovie(): Promise<void> {
 }
 .facts dd {
   margin: 0;
+}
+.imdb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.refresh {
+  background: transparent;
+  border: 1px solid rgba(128, 128, 128, 0.4);
+  padding: 0.1rem 0.4rem;
+  font-size: 0.9rem;
+  line-height: 1;
 }
 .note {
   font-style: italic;
