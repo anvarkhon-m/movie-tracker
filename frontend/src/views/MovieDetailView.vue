@@ -3,6 +3,15 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useMovie } from '@/composables/useMovie'
+import Button from 'primevue/button'
+import InputText from 'primevue/inputtext'
+import InputNumber from 'primevue/inputnumber'
+import Textarea from 'primevue/textarea'
+import Select from 'primevue/select'
+import DatePicker from 'primevue/datepicker'
+import Tag from 'primevue/tag'
+import Message from 'primevue/message'
+import ProgressSpinner from 'primevue/progressspinner'
 import type { WatchStatus } from '@/api/types'
 
 const { t } = useI18n()
@@ -21,11 +30,18 @@ const {
   removeMovie,
 } = useMovie()
 
-const refreshingRating = ref(false)
+const SEVERITY: Record<WatchStatus, string> = {
+  PLAN_TO_WATCH: 'secondary',
+  WATCHING: 'info',
+  COMPLETED: 'success',
+  DROPPED: 'danger',
+}
 
+const id = computed(() => Number(route.params.id))
+
+const refreshingRating = ref(false)
 const COOLDOWN_MS = 24 * 60 * 60 * 1000
 
-// 24 soat ichida yangilangan bo'lsa — OMDb limitini saqlash uchun tugma o'chiriladi.
 const ratingOnCooldown = computed(() => {
   const ts = movie.value?.imdbRatingUpdatedAt
   return ts != null && Date.now() - new Date(ts).getTime() < COOLDOWN_MS
@@ -40,9 +56,9 @@ async function onRefreshRating(): Promise<void> {
   }
 }
 
-const id = computed(() => Number(route.params.id))
-
 const STATUSES: WatchStatus[] = ['PLAN_TO_WATCH', 'WATCHING', 'COMPLETED', 'DROPPED']
+const statusOptions = computed(() => STATUSES.map((s) => ({ label: t(`status.${s}`), value: s })))
+
 const editing = ref(false)
 const edit = reactive<{
   personalRating: number | null
@@ -83,12 +99,16 @@ async function saveEdit(): Promise<void> {
   editing.value = false
 }
 
-const today = new Date().toISOString().slice(0, 10)
-const form = reactive<{ watchedAt: string; platform: string; note: string }>({
-  watchedAt: today,
+const maxDate = new Date()
+const form = reactive<{ watchedAt: Date; platform: string; note: string }>({
+  watchedAt: new Date(),
   platform: '',
   note: '',
 })
+
+function toIsoDate(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
 
 onMounted(() => {
   void load(id.value)
@@ -96,13 +116,13 @@ onMounted(() => {
 
 async function submitWatch(): Promise<void> {
   await addWatch(id.value, {
-    watchedAt: form.watchedAt,
+    watchedAt: toIsoDate(form.watchedAt),
     platform: form.platform || undefined,
     note: form.note || undefined,
   })
   form.platform = ''
   form.note = ''
-  form.watchedAt = today
+  form.watchedAt = new Date()
 }
 
 async function onDeleteWatch(historyId: number): Promise<void> {
@@ -118,22 +138,22 @@ async function onDeleteMovie(): Promise<void> {
 
 <template>
   <section class="detail">
-    <RouterLink class="back" to="/movies">{{ t('detail.back') }}</RouterLink>
+    <RouterLink class="back" to="/movies"><i class="pi pi-arrow-left" /> {{ t('nav.movies') }}</RouterLink>
 
-    <p v-if="loading">{{ t('movies.loading') }}</p>
-    <p v-else-if="error" class="error">{{ t('movies.error') }}: {{ error }}</p>
+    <div v-if="loading" class="centered"><ProgressSpinner style="width: 42px; height: 42px" /></div>
+    <Message v-else-if="error" severity="error">{{ t('movies.error') }}: {{ error }}</Message>
 
     <template v-else-if="movie">
       <div class="header">
         <img v-if="movie.posterUrl" :src="movie.posterUrl" :alt="movie.title" class="poster" />
-        <div v-else class="poster placeholder">🎬</div>
+        <div v-else class="poster placeholder"><i class="pi pi-video" /></div>
 
         <div class="info">
           <h1>{{ movie.title }} <span v-if="movie.releaseYear" class="year">({{ movie.releaseYear }})</span></h1>
-          <p class="status-line">
-            <span class="badge">{{ t(`status.${movie.status}`) }}</span>
+          <div class="status-line">
+            <Tag :value="t(`status.${movie.status}`)" :severity="SEVERITY[movie.status]" />
             <span class="muted">{{ t('detail.watchCount') }}: {{ movie.watchCount }}</span>
-          </p>
+          </div>
 
           <dl class="facts">
             <template v-if="movie.genres.length">
@@ -148,15 +168,17 @@ async function onDeleteMovie(): Promise<void> {
               <dt>{{ t('detail.imdb') }}</dt>
               <dd class="imdb">
                 <span>{{ movie.imdbRating != null ? `⭐ ${movie.imdbRating}` : '—' }}</span>
-                <button
+                <Button
                   v-if="movie.tmdbId != null"
-                  class="refresh"
-                  :disabled="refreshingRating || ratingOnCooldown"
+                  text
+                  rounded
+                  size="small"
+                  icon="pi pi-refresh"
+                  :loading="refreshingRating"
+                  :disabled="ratingOnCooldown"
                   :title="ratingOnCooldown ? t('detail.ratingFresh') : t('detail.refreshRating')"
                   @click="onRefreshRating"
-                >
-                  {{ refreshingRating ? '…' : '⟳' }}
-                </button>
+                />
               </dd>
             </template>
             <template v-if="movie.personalRating != null">
@@ -176,31 +198,29 @@ async function onDeleteMovie(): Promise<void> {
           <p v-if="movie.personalNote" class="note">{{ movie.personalNote }}</p>
 
           <div v-if="!editing" class="actions">
-            <button @click="startEdit">{{ t('edit.edit') }}</button>
-            <button class="danger" @click="onDeleteMovie">{{ t('detail.delete') }}</button>
+            <Button :label="t('edit.edit')" icon="pi pi-pencil" outlined @click="startEdit" />
+            <Button :label="t('detail.delete')" icon="pi pi-trash" severity="danger" outlined @click="onDeleteMovie" />
           </div>
 
           <form v-else class="edit-form" @submit.prevent="saveEdit">
             <label>{{ t('edit.status') }}
-              <select v-model="edit.status">
-                <option v-for="s in STATUSES" :key="s" :value="s">{{ t(`status.${s}`) }}</option>
-              </select>
+              <Select v-model="edit.status" :options="statusOptions" option-label="label" option-value="value" />
             </label>
             <label>{{ t('edit.personalRating') }}
-              <input v-model.number="edit.personalRating" type="number" min="0" max="10" step="0.5" />
+              <InputNumber v-model="edit.personalRating" :min="0" :max="10" :max-fraction-digits="1" show-buttons />
             </label>
             <label>{{ t('edit.platform') }}
-              <input v-model="edit.platform" />
+              <InputText v-model="edit.platform" />
             </label>
             <label>{{ t('edit.watchedLanguage') }}
-              <input v-model="edit.language" :placeholder="t('edit.watchedLanguageHint')" />
+              <InputText v-model="edit.language" :placeholder="t('edit.watchedLanguageHint')" />
             </label>
             <label>{{ t('edit.note') }}
-              <textarea v-model="edit.personalNote" rows="3"></textarea>
+              <Textarea v-model="edit.personalNote" rows="3" auto-resize />
             </label>
             <div class="actions">
-              <button type="submit">{{ t('edit.save') }}</button>
-              <button type="button" class="ghost" @click="editing = false">{{ t('edit.cancel') }}</button>
+              <Button type="submit" :label="t('edit.save')" icon="pi pi-check" />
+              <Button type="button" :label="t('edit.cancel')" severity="secondary" text @click="editing = false" />
             </div>
           </form>
         </div>
@@ -210,19 +230,19 @@ async function onDeleteMovie(): Promise<void> {
         <h2>{{ t('history.title') }}</h2>
 
         <form class="watch-form" @submit.prevent="submitWatch">
-          <input v-model="form.watchedAt" type="date" :max="today" required />
-          <input v-model="form.platform" :placeholder="t('history.platform')" />
-          <input v-model="form.note" :placeholder="t('history.note')" />
-          <button type="submit">{{ t('history.add') }}</button>
+          <DatePicker v-model="form.watchedAt" :max-date="maxDate" date-format="yy-mm-dd" show-icon />
+          <InputText v-model="form.platform" :placeholder="t('history.platform')" />
+          <InputText v-model="form.note" :placeholder="t('history.note')" />
+          <Button type="submit" :label="t('history.add')" icon="pi pi-plus" />
         </form>
 
-        <p v-if="history.length === 0" class="muted">{{ t('history.empty') }}</p>
+        <Message v-if="history.length === 0" severity="secondary">{{ t('history.empty') }}</Message>
         <ul v-else class="history-list">
           <li v-for="entry in history" :key="entry.id">
-            <span class="date">{{ entry.watchedAt }}</span>
+            <span class="date"><i class="pi pi-calendar" /> {{ entry.watchedAt }}</span>
             <span v-if="entry.platform" class="muted">{{ entry.platform }}</span>
             <span v-if="entry.note" class="entry-note">{{ entry.note }}</span>
-            <button class="link-danger" @click="onDeleteWatch(entry.id)">✕</button>
+            <Button text rounded severity="danger" size="small" icon="pi pi-times" @click="onDeleteWatch(entry.id)" />
           </li>
         </ul>
       </section>
@@ -232,70 +252,79 @@ async function onDeleteMovie(): Promise<void> {
 
 <style scoped>
 .detail {
-  max-width: 820px;
+  max-width: 860px;
   margin: 0 auto;
-  padding: 1rem 0;
+  padding: 0.5rem 0 2rem;
 }
 .back {
-  display: inline-block;
-  margin-bottom: 1rem;
-  opacity: 0.8;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+  color: var(--p-text-muted-color);
+  font-weight: 500;
+}
+.back:hover {
+  color: var(--p-primary-color);
+}
+.centered {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
 }
 .header {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.8rem;
   flex-wrap: wrap;
 }
 .poster {
-  width: 200px;
+  width: 220px;
   aspect-ratio: 2 / 3;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: var(--p-border-radius-lg, 12px);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 3rem;
+  color: var(--p-text-muted-color);
 }
 .placeholder {
-  background: rgba(128, 128, 128, 0.15);
+  background: var(--p-surface-100);
+}
+:global(.app-dark) .placeholder {
+  background: var(--p-surface-800);
 }
 .info {
   flex: 1;
-  min-width: 260px;
+  min-width: 280px;
 }
 .info h1 {
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.6rem;
+  font-size: 1.6rem;
 }
 .year {
   font-weight: 400;
-  opacity: 0.7;
+  color: var(--p-text-muted-color);
 }
 .status-line {
   display: flex;
   gap: 1rem;
   align-items: center;
-  margin: 0 0 1rem;
-}
-.badge {
-  background: #646cff;
-  color: white;
-  padding: 0.2rem 0.6rem;
-  border-radius: 12px;
-  font-size: 0.8rem;
+  margin: 0 0 1.2rem;
 }
 .muted {
-  opacity: 0.7;
+  color: var(--p-text-muted-color);
   font-size: 0.9rem;
 }
 .facts {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 0.3rem 1rem;
-  margin: 0 0 1rem;
+  gap: 0.45rem 1.2rem;
+  margin: 0 0 1.2rem;
 }
 .facts dt {
   font-weight: 600;
-  opacity: 0.8;
+  color: var(--p-text-muted-color);
 }
 .facts dd {
   margin: 0;
@@ -303,61 +332,45 @@ async function onDeleteMovie(): Promise<void> {
 .imdb {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-.refresh {
-  background: transparent;
-  border: 1px solid rgba(128, 128, 128, 0.4);
-  padding: 0.1rem 0.4rem;
-  font-size: 0.9rem;
-  line-height: 1;
+  gap: 0.3rem;
 }
 .note {
   font-style: italic;
-  opacity: 0.85;
-  margin: 0 0 1rem;
-}
-.danger {
-  background: #b53737;
+  color: var(--p-text-muted-color);
+  margin: 0 0 1.2rem;
+  padding-left: 0.8rem;
+  border-left: 3px solid var(--p-content-border-color);
 }
 .actions {
   display: flex;
   gap: 0.6rem;
+  flex-wrap: wrap;
 }
 .edit-form {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.7rem;
   max-width: 360px;
 }
 .edit-form label {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  font-size: 0.8rem;
-  opacity: 0.85;
-}
-.edit-form textarea {
-  resize: vertical;
-  font: inherit;
-  border-radius: 6px;
-  border: 1px solid rgba(128, 128, 128, 0.4);
-  background: transparent;
-  color: inherit;
-  padding: 0.4rem;
-}
-.ghost {
-  background: transparent;
-  border: 1px solid rgba(128, 128, 128, 0.4);
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--p-text-muted-color);
 }
 .history {
-  margin-top: 2.5rem;
+  margin-top: 3rem;
+}
+.history h2 {
+  font-size: 1.2rem;
+  margin: 0 0 1rem;
 }
 .watch-form {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
 }
 .history-list {
   list-style: none;
@@ -365,31 +378,28 @@ async function onDeleteMovie(): Promise<void> {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.6rem;
 }
 .history-list li {
   display: flex;
   gap: 1rem;
   align-items: center;
-  padding: 0.5rem 0.7rem;
-  border: 1px solid rgba(128, 128, 128, 0.3);
-  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  background: var(--p-content-background);
+  border: 1px solid var(--p-content-border-color);
+  border-radius: var(--p-border-radius-md, 8px);
 }
 .date {
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 .entry-note {
   flex: 1;
-  opacity: 0.85;
+  color: var(--p-text-muted-color);
 }
-.link-danger {
+.history-list li :deep(.p-button) {
   margin-left: auto;
-  background: transparent;
-  border: none;
-  color: #e05252;
-  padding: 0.2rem 0.4rem;
-}
-.error {
-  color: #e05252;
 }
 </style>

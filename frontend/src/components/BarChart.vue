@@ -44,14 +44,17 @@ const max = computed(() => Math.max(1, ...props.items.map((i) => i.value)))
   white-space: nowrap;
 }
 .track {
-  background: rgba(128, 128, 128, 0.15);
+  background: var(--p-surface-200);
   border-radius: 4px;
   height: 18px;
   overflow: hidden;
 }
+:global(.app-dark) .track {
+  background: var(--p-surface-700);
+}
 .fill {
   height: 100%;
-  background: linear-gradient(90deg, #646cff, #a855f7);
+  background: linear-gradient(90deg, var(--p-primary-color), #a855f7);
   border-radius: 4px;
   min-width: 2px;
   transition: width 0.3s;

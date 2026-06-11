@@ -1,7 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useDiscover } from '@/composables/useDiscover'
+import SelectButton from 'primevue/selectbutton'
+import IconField from 'primevue/iconfield'
+import InputIcon from 'primevue/inputicon'
+import InputText from 'primevue/inputtext'
+import Button from 'primevue/button'
+import ProgressSpinner from 'primevue/progressspinner'
+import Message from 'primevue/message'
 import type { DiscoverType } from '@/api/types'
 
 const { t } = useI18n()
@@ -10,13 +17,16 @@ const { results, loading, error, searched, addingId, addedIds, search, add } = u
 const type = ref<DiscoverType>('movie')
 const query = ref('')
 
+const typeOptions = computed(() => [
+  { label: t('discover.movies'), value: 'movie' as DiscoverType },
+  { label: t('discover.serials'), value: 'serial' as DiscoverType },
+])
+
 function submit(): void {
   void search(type.value, query.value)
 }
 
-function switchType(next: DiscoverType): void {
-  if (type.value === next) return
-  type.value = next
+function switchType(): void {
   if (query.value.trim()) submit()
 }
 </script>
@@ -26,44 +36,47 @@ function switchType(next: DiscoverType): void {
     <h1>{{ t('discover.title') }}</h1>
 
     <div class="controls">
-      <div class="toggle">
-        <button :class="{ active: type === 'movie' }" @click="switchType('movie')">
-          {{ t('discover.movies') }}
-        </button>
-        <button :class="{ active: type === 'serial' }" @click="switchType('serial')">
-          {{ t('discover.serials') }}
-        </button>
-      </div>
+      <SelectButton
+        v-model="type"
+        :options="typeOptions"
+        option-label="label"
+        option-value="value"
+        :allow-empty="false"
+        @change="switchType"
+      />
       <form class="search" @submit.prevent="submit">
-        <input v-model="query" :placeholder="t('discover.placeholder')" />
-        <button type="submit">{{ t('discover.searchBtn') }}</button>
+        <IconField class="field">
+          <InputIcon class="pi pi-search" />
+          <InputText v-model="query" :placeholder="t('discover.placeholder')" fluid />
+        </IconField>
+        <Button type="submit" :label="t('discover.searchBtn')" />
       </form>
     </div>
 
-    <p v-if="loading">{{ t('movies.loading') }}</p>
-    <p v-else-if="error" class="error">{{ t('movies.error') }}: {{ error }}</p>
-    <p v-else-if="!searched" class="hint">{{ t('discover.hint') }}</p>
-    <p v-else-if="results.length === 0">{{ t('discover.empty') }}</p>
+    <div v-if="loading" class="centered"><ProgressSpinner style="width: 42px; height: 42px" /></div>
+    <Message v-else-if="error" severity="error">{{ t('movies.error') }}: {{ error }}</Message>
+    <Message v-else-if="!searched" severity="secondary">{{ t('discover.hint') }}</Message>
+    <Message v-else-if="results.length === 0" severity="secondary">{{ t('discover.empty') }}</Message>
 
     <ul v-else class="grid">
       <li v-for="item in results" :key="item.tmdbId" class="card">
-        <img v-if="item.posterUrl" :src="item.posterUrl" :alt="item.title" class="poster" />
-        <div v-else class="poster placeholder">🎬</div>
+        <div class="poster-wrap">
+          <img v-if="item.posterUrl" :src="item.posterUrl" :alt="item.title" class="poster" />
+          <div v-else class="poster placeholder"><i class="pi pi-image" /></div>
+          <span v-if="item.rating != null" class="badge"><i class="pi pi-star-fill" /> {{ item.rating }}</span>
+        </div>
         <div class="meta">
-          <h3>{{ item.title }}</h3>
-          <p class="sub">
-            <span v-if="item.releaseYear">{{ item.releaseYear }}</span>
-            <span v-if="item.rating != null">⭐ {{ item.rating }}</span>
-          </p>
-          <button
-            class="add-btn"
+          <span class="title">{{ item.title }}</span>
+          <span v-if="item.releaseYear" class="muted">{{ item.releaseYear }}</span>
+          <Button
+            class="add"
+            size="small"
             :disabled="addingId === item.tmdbId || addedIds.has(item.tmdbId)"
+            :severity="addedIds.has(item.tmdbId) ? 'success' : 'primary'"
+            :icon="addedIds.has(item.tmdbId) ? 'pi pi-check' : 'pi pi-plus'"
+            :label="addedIds.has(item.tmdbId) ? t('discover.added') : addingId === item.tmdbId ? t('discover.adding') : t('discover.add')"
             @click="add(type, item.tmdbId)"
-          >
-            <template v-if="addedIds.has(item.tmdbId)">{{ t('discover.added') }}</template>
-            <template v-else-if="addingId === item.tmdbId">{{ t('discover.adding') }}</template>
-            <template v-else>{{ t('discover.add') }}</template>
-          </button>
+          />
         </div>
       </li>
     </ul>
@@ -72,50 +85,54 @@ function switchType(next: DiscoverType): void {
 
 <style scoped>
 .discover {
-  max-width: 960px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 1rem 0;
+  padding: 0.5rem 0 2rem;
+}
+h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0 0 1.2rem;
 }
 .controls {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-bottom: 1.2rem;
-}
-.toggle {
-  display: flex;
-  gap: 0.3rem;
-}
-.toggle button {
-  background: transparent;
-  border: 1px solid rgba(128, 128, 128, 0.4);
-}
-.toggle button.active {
-  background: #646cff;
-  border-color: #646cff;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 .search {
   display: flex;
   gap: 0.5rem;
   flex: 1;
-  min-width: 240px;
+  min-width: 260px;
 }
-.search input {
+.field {
   flex: 1;
+}
+.centered {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
 }
 .grid {
   list-style: none;
   padding: 0;
+  margin: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 1.4rem;
 }
 .card {
-  border: 1px solid rgba(128, 128, 128, 0.3);
-  border-radius: 8px;
+  background: var(--p-content-background);
+  border: 1px solid var(--p-content-border-color);
+  border-radius: var(--p-border-radius-lg, 12px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+.poster-wrap {
+  position: relative;
 }
 .poster {
   width: 100%;
@@ -124,41 +141,42 @@ function switchType(next: DiscoverType): void {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 2.2rem;
+  color: var(--p-text-muted-color);
 }
 .placeholder {
-  background: rgba(128, 128, 128, 0.15);
+  background: var(--p-surface-100);
+}
+:global(.app-dark) .placeholder {
+  background: var(--p-surface-800);
+}
+.badge {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background: rgba(0, 0, 0, 0.78);
+  color: #ffd54a;
+  padding: 0.12rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
 }
 .meta {
-  padding: 0.5rem 0.7rem;
+  padding: 0.7rem 0.8rem;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
   flex: 1;
 }
-.meta h3 {
-  font-size: 0.95rem;
-  margin: 0;
+.title {
+  font-weight: 600;
+  font-size: 0.92rem;
 }
-.sub {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  opacity: 0.75;
-  margin: 0;
+.muted {
+  color: var(--p-text-muted-color);
+  font-size: 0.82rem;
 }
-.add-btn {
+.add {
   margin-top: auto;
-  font-size: 0.85rem;
-}
-.add-btn:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
-.hint {
-  opacity: 0.7;
-}
-.error {
-  color: #e05252;
 }
 </style>

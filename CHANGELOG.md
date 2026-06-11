@@ -215,6 +215,21 @@
 - Factory lar TMDB tilidan to'ldirmaydi; detail edit formaga "Ko'rilgan til" maydoni qo'shildi
 - Facts da ko'rsatiladi; i18n (uz/ru/en)
 
+## 2026-06-11 — Session 9: PrimeVue Aura redesign
+
+### Qilinganlar
+- Butun frontend **PrimeVue Aura** dizayniga o'tkazildi (foydalanuvchi tanlovi)
+- Theme setup: Aura preset, `.app-dark` orqali dark mode, settingsStore bilan bog'landi
+- Sahifa fonlari/ranglari PrimeVue design token lardan (avtomatik light/dark)
+- Yangi sticky header (gradient brand, ikonali nav, accent active holat)
+- Barcha sahifalar PrimeVue komponentlari bilan:
+  - Movies/Serials/Discover: poster kartalar (hover lift), filter inputlari, Tag, ProgressSpinner, Message
+  - Movie/Serial detail: Button/Select/InputNumber/Textarea/DatePicker, Tag, episodes
+  - Home: stat kartalar + MediaGrid; Watchlist/Favorites: MediaGrid
+  - Login/Profile: Button, InputText, Select
+  - StatsView/BarChart: token rangli grafiklar
+- Global `button/input/select` CSS olib tashlandi (PrimeVue o'zi boshqaradi)
+
 ## 2026-06-11 — Session 8: Sahifalar to'plami + dark mode
 
 ### Qilinganlar

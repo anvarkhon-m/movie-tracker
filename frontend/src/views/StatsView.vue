@@ -3,6 +3,8 @@ import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStats } from '@/composables/useStats'
 import BarChart from '@/components/BarChart.vue'
+import ProgressSpinner from 'primevue/progressspinner'
+import Message from 'primevue/message'
 import type { WatchStatus } from '@/api/types'
 
 const { t } = useI18n()
@@ -43,8 +45,8 @@ const yearItems = computed(() =>
   <section class="stats">
     <h1>{{ t('stats.title') }}</h1>
 
-    <p v-if="loading">{{ t('movies.loading') }}</p>
-    <p v-else-if="error" class="error">{{ t('movies.error') }}: {{ error }}</p>
+    <div v-if="loading" class="centered"><ProgressSpinner style="width: 42px; height: 42px" /></div>
+    <Message v-else-if="error" severity="error">{{ t('movies.error') }}: {{ error }}</Message>
 
     <template v-else-if="stats">
       <div class="cards">
@@ -103,8 +105,9 @@ const yearItems = computed(() =>
   margin-bottom: 2rem;
 }
 .card {
-  border: 1px solid rgba(128, 128, 128, 0.3);
-  border-radius: 8px;
+  background: var(--p-content-background);
+  border: 1px solid var(--p-content-border-color);
+  border-radius: var(--p-border-radius-lg, 12px);
   padding: 1.2rem;
   display: flex;
   flex-direction: column;
@@ -113,11 +116,11 @@ const yearItems = computed(() =>
 }
 .num {
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 800;
 }
 .lbl {
   font-size: 0.85rem;
-  opacity: 0.75;
+  color: var(--p-text-muted-color);
 }
 .panels {
   display: grid;
@@ -125,19 +128,22 @@ const yearItems = computed(() =>
   gap: 1.5rem;
 }
 .panel {
-  border: 1px solid rgba(128, 128, 128, 0.3);
-  border-radius: 8px;
-  padding: 1.2rem;
+  background: var(--p-content-background);
+  border: 1px solid var(--p-content-border-color);
+  border-radius: var(--p-border-radius-lg, 12px);
+  padding: 1.3rem;
 }
 .panel h2 {
   font-size: 1rem;
   margin: 0 0 1rem;
 }
 .muted {
-  opacity: 0.6;
+  color: var(--p-text-muted-color);
   font-size: 0.9rem;
 }
-.error {
-  color: #e05252;
+.centered {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
 }
 </style>

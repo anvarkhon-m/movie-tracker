@@ -4,6 +4,8 @@ import { useI18n } from 'vue-i18n'
 import { useMovies } from '@/composables/useMovies'
 import { useSerials } from '@/composables/useSerials'
 import MediaGrid from '@/components/MediaGrid.vue'
+import ProgressSpinner from 'primevue/progressspinner'
+import Message from 'primevue/message'
 import type { MediaItem } from '@/api/types'
 
 const { t } = useI18n()
@@ -59,19 +61,26 @@ const items = computed<MediaItem[]>(() => {
 <template>
   <section class="page">
     <h1>{{ t('favorites.title') }}</h1>
-    <p v-if="lm || ls">{{ t('movies.loading') }}</p>
-    <p v-else-if="items.length === 0" class="empty">{{ t('favorites.empty') }}</p>
+    <div v-if="lm || ls" class="centered"><ProgressSpinner style="width: 42px; height: 42px" /></div>
+    <Message v-else-if="items.length === 0" severity="secondary">{{ t('favorites.empty') }}</Message>
     <MediaGrid v-else :items="items" />
   </section>
 </template>
 
 <style scoped>
 .page {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 1rem 0;
+  padding: 0.5rem 0 2rem;
 }
-.empty {
-  opacity: 0.75;
+h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0 0 1.2rem;
+}
+.centered {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
 }
 </style>

@@ -5,18 +5,26 @@ import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { useSettingsStore } from '@/stores/settings'
 import { setLocale, type AppLocale } from '@/i18n'
+import Select from 'primevue/select'
+import Button from 'primevue/button'
 
 const { t, locale } = useI18n()
 const auth = useAuthStore()
 const settings = useSettingsStore()
 const router = useRouter()
 
+const localeOptions = [
+  { label: "O'zbek", value: 'uz' },
+  { label: 'Русский', value: 'ru' },
+  { label: 'English', value: 'en' },
+]
+
 onMounted(() => {
   if (!auth.user) void auth.fetchMe()
 })
 
-function changeLocale(event: Event): void {
-  setLocale((event.target as HTMLSelectElement).value as AppLocale)
+function changeLocale(value: AppLocale): void {
+  setLocale(value)
 }
 
 function logout(): void {
@@ -39,23 +47,29 @@ function logout(): void {
     </div>
 
     <div class="settings">
-      <label class="row">
+      <div class="row">
         <span>{{ t('profile.language') }}</span>
-        <select :value="locale" @change="changeLocale">
-          <option value="uz">O'zbek</option>
-          <option value="ru">Русский</option>
-          <option value="en">English</option>
-        </select>
-      </label>
+        <Select
+          :model-value="locale"
+          :options="localeOptions"
+          option-label="label"
+          option-value="value"
+          @update:model-value="changeLocale"
+        />
+      </div>
       <div class="row">
         <span>{{ t('profile.theme') }}</span>
-        <button class="theme-btn" @click="settings.toggle">
-          {{ settings.theme === 'dark' ? `🌙 ${t('profile.dark')}` : `☀️ ${t('profile.light')}` }}
-        </button>
+        <Button
+          :label="settings.theme === 'dark' ? t('profile.dark') : t('profile.light')"
+          :icon="settings.theme === 'dark' ? 'pi pi-moon' : 'pi pi-sun'"
+          severity="secondary"
+          outlined
+          @click="settings.toggle"
+        />
       </div>
     </div>
 
-    <button class="logout" @click="logout">{{ t('nav.logout') }}</button>
+    <Button :label="t('nav.logout')" icon="pi pi-sign-out" severity="danger" @click="logout" />
   </section>
 </template>
 
@@ -63,13 +77,21 @@ function logout(): void {
 .profile {
   max-width: 520px;
   margin: 0 auto;
-  padding: 1rem 0;
+  padding: 0.5rem 0 2rem;
+}
+h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem;
 }
 .account {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin: 1.5rem 0;
+  background: var(--p-content-background);
+  border: 1px solid var(--p-content-border-color);
+  border-radius: var(--p-border-radius-lg, 12px);
+  padding: 1.2rem;
 }
 .avatar {
   width: 64px;
@@ -80,11 +102,11 @@ function logout(): void {
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 .avatar.placeholder {
-  background: #646cff;
-  color: white;
+  background: var(--p-primary-color);
+  color: var(--p-primary-contrast-color, #fff);
 }
 .who {
   display: flex;
@@ -92,32 +114,22 @@ function logout(): void {
 }
 .name {
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 .email {
-  opacity: 0.7;
+  color: var(--p-text-muted-color);
   font-size: 0.9rem;
 }
 .settings {
-  border-top: 1px solid rgba(128, 128, 128, 0.3);
-  border-bottom: 1px solid rgba(128, 128, 128, 0.3);
-  padding: 1rem 0;
   margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 .row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-}
-.row + .row {
-  margin-top: 0.8rem;
-}
-.theme-btn {
-  background: transparent;
-  border: 1px solid rgba(128, 128, 128, 0.4);
-}
-.logout {
-  background: #b53737;
 }
 </style>

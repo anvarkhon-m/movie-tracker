@@ -3,14 +3,16 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+import Button from 'primevue/button'
+import InputText from 'primevue/inputtext'
 
 const { t } = useI18n()
 const auth = useAuthStore()
 const router = useRouter()
 const devToken = ref('')
+const showDev = ref(false)
 
 function googleLogin(): void {
-  // To'liq sahifa navigatsiyasi — Vite proxy /api ni backend ga uzatadi.
   window.location.href = '/api/v1/auth/google'
 }
 
@@ -24,46 +26,60 @@ async function devLogin(): Promise<void> {
 
 <template>
   <div class="login">
-    <h1>{{ t('login.title') }}</h1>
+    <div class="brand">🎬 <span>Movie Tracker</span></div>
+    <p class="tagline">{{ t('login.title') }}</p>
 
-    <button class="btn-google" @click="googleLogin">{{ t('login.google') }}</button>
+    <Button class="google" :label="t('login.google')" icon="pi pi-google" @click="googleLogin" />
 
-    <details class="dev-login">
-      <summary>{{ t('login.devTitle') }}</summary>
-      <form @submit.prevent="devLogin">
-        <input v-model="devToken" :placeholder="t('login.devPlaceholder')" />
-        <button type="submit">{{ t('login.devSubmit') }}</button>
-      </form>
-    </details>
+    <button class="dev-toggle" @click="showDev = !showDev">{{ t('login.devTitle') }}</button>
+    <form v-if="showDev" class="dev-form" @submit.prevent="devLogin">
+      <InputText v-model="devToken" :placeholder="t('login.devPlaceholder')" fluid />
+      <Button type="submit" :label="t('login.devSubmit')" severity="secondary" outlined />
+    </form>
   </div>
 </template>
 
 <style scoped>
 .login {
   max-width: 380px;
-  margin: 12vh auto;
-  text-align: center;
+  margin: 14vh auto;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.2rem;
+  align-items: center;
+  text-align: center;
 }
-.btn-google {
-  padding: 0.8rem 1rem;
-  font-size: 1rem;
-  font-weight: 600;
+.brand {
+  font-size: 1.8rem;
+  font-weight: 800;
 }
-.dev-login {
-  text-align: left;
+.brand span {
+  background: linear-gradient(90deg, var(--p-primary-color), #a855f7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.tagline {
+  color: var(--p-text-muted-color);
+  margin: 0 0 0.5rem;
+}
+.google {
+  width: 100%;
+}
+.dev-toggle {
+  background: none;
+  border: none;
+  color: var(--p-text-muted-color);
   font-size: 0.85rem;
-  opacity: 0.85;
+  cursor: pointer;
+  padding: 0;
 }
-.dev-login form {
+.dev-form {
   display: flex;
   gap: 0.5rem;
-  margin-top: 0.5rem;
+  width: 100%;
 }
-.dev-login input {
+.dev-form :deep(.p-inputtext) {
   flex: 1;
-  padding: 0.4rem;
 }
 </style>
