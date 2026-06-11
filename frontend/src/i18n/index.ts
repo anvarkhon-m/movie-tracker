@@ -5,7 +5,7 @@ const LOCALE_KEY = 'mt_locale'
 const messages = {
   uz: {
     app: { title: 'Movie Tracker' },
-    nav: { home: 'Bosh sahifa', movies: 'Kinolar', discover: 'Topish', logout: 'Chiqish' },
+    nav: { home: 'Bosh sahifa', movies: 'Kinolar', serials: 'Seriallar', discover: 'Topish', logout: 'Chiqish' },
     login: {
       title: 'Movie Tracker ga kirish',
       google: 'Google bilan kirish',
@@ -58,10 +58,38 @@ const messages = {
       note: 'Izoh',
       add: 'Ko\'rishni qo\'shish',
     },
+    serials: {
+      title: 'Seriallar',
+      empty: 'Hali serial qo\'shilmagan',
+    },
+    serialStatus: {
+      ONGOING: 'Davom etmoqda',
+      ENDED: 'Tugagan',
+      CANCELLED: 'Bekor qilingan',
+    },
+    serialDetail: {
+      back: '← Seriallar',
+      seasons: 'Fasllar',
+      episodesCount: 'Epizodlar',
+      delete: 'Serialni o\'chirish',
+      deleteConfirm: 'Bu serial o\'chirilsinmi?',
+    },
+    episodes: {
+      title: 'Epizodlar',
+      season: 'Fasl',
+      empty: 'Epizod qo\'shilmagan',
+      add: 'Epizod qo\'shish',
+      seasonNo: 'Fasl №',
+      episodeNo: 'Epizod №',
+      epTitle: 'Nomi',
+      duration: 'Daqiqa',
+      markWatched: 'Ko\'rildi deb belgilash',
+      watched: 'Ko\'rilgan ✓',
+    },
   },
   ru: {
     app: { title: 'Movie Tracker' },
-    nav: { home: 'Главная', movies: 'Фильмы', discover: 'Поиск', logout: 'Выйти' },
+    nav: { home: 'Главная', movies: 'Фильмы', serials: 'Сериалы', discover: 'Поиск', logout: 'Выйти' },
     login: {
       title: 'Вход в Movie Tracker',
       google: 'Войти через Google',
@@ -114,10 +142,38 @@ const messages = {
       note: 'Заметка',
       add: 'Добавить просмотр',
     },
+    serials: {
+      title: 'Сериалы',
+      empty: 'Сериалы ещё не добавлены',
+    },
+    serialStatus: {
+      ONGOING: 'Выходит',
+      ENDED: 'Завершён',
+      CANCELLED: 'Отменён',
+    },
+    serialDetail: {
+      back: '← Сериалы',
+      seasons: 'Сезоны',
+      episodesCount: 'Эпизоды',
+      delete: 'Удалить сериал',
+      deleteConfirm: 'Удалить этот сериал?',
+    },
+    episodes: {
+      title: 'Эпизоды',
+      season: 'Сезон',
+      empty: 'Эпизоды не добавлены',
+      add: 'Добавить эпизод',
+      seasonNo: 'Сезон №',
+      episodeNo: 'Эпизод №',
+      epTitle: 'Название',
+      duration: 'Минут',
+      markWatched: 'Отметить просмотренным',
+      watched: 'Просмотрен ✓',
+    },
   },
   en: {
     app: { title: 'Movie Tracker' },
-    nav: { home: 'Home', movies: 'Movies', discover: 'Discover', logout: 'Logout' },
+    nav: { home: 'Home', movies: 'Movies', serials: 'Serials', discover: 'Discover', logout: 'Logout' },
     login: {
       title: 'Sign in to Movie Tracker',
       google: 'Sign in with Google',
@@ -169,6 +225,34 @@ const messages = {
       platform: 'Platform',
       note: 'Note',
       add: 'Add watch',
+    },
+    serials: {
+      title: 'Serials',
+      empty: 'No serials added yet',
+    },
+    serialStatus: {
+      ONGOING: 'Ongoing',
+      ENDED: 'Ended',
+      CANCELLED: 'Cancelled',
+    },
+    serialDetail: {
+      back: '← Serials',
+      seasons: 'Seasons',
+      episodesCount: 'Episodes',
+      delete: 'Delete serial',
+      deleteConfirm: 'Delete this serial?',
+    },
+    episodes: {
+      title: 'Episodes',
+      season: 'Season',
+      empty: 'No episodes added',
+      add: 'Add episode',
+      seasonNo: 'Season #',
+      episodeNo: 'Episode #',
+      epTitle: 'Title',
+      duration: 'Minutes',
+      markWatched: 'Mark watched',
+      watched: 'Watched ✓',
     },
   },
 }

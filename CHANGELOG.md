@@ -158,11 +158,20 @@
   - MinIO poster public: HTTP 200, image/jpeg, 105 KB
   - POST history → recordWatch ishladi: watchCount=1, status=COMPLETED
 
+### Serials section (qo'shildi)
+- `useSerials` (ro'yxat) + `useSerial` (detail + epizodlar) composable lar
+- `SerialsView` (`/serials`) — grid, detail ga link
+- `SerialDetailView` (`/serials/:id`) — to'liq ma'lumot, epizodlar fasllar bo'yicha guruhlangan,
+  epizod qo'shish/o'chirish, "ko'rildi" deb belgilash (episode history endpoint)
+- Nav + routes + i18n (uz/ru/en), serialStatus tarjimalari
+- Jonli sinov (to'liq zanjir):
+  - POST /serials {tmdbId:1396} → Breaking Bad (5 fasl, 62 epizod, ENDED), poster MinIO da
+  - POST episode → POST episode history → GET: watched=true (isWatched domain logikasi)
+
 ### Keyingi session uchun
-- [ ] Serials ro'yxati + detail + epizodlar
-- [ ] Filter/search UI (movies)
+- [ ] Filter/search UI (movies + serials)
 - [ ] Statistics sahifa (`/stats` dan grafiklar)
-- [ ] Movie detail: shaxsiy baho/status/izoh tahrirlash (hozir faqat ko'rsatiladi)
+- [ ] Detail: shaxsiy baho/status/izoh tahrirlash (hozir faqat ko'rsatiladi)
 
 ---
 

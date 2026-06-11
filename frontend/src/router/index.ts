@@ -23,6 +23,18 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: '/serials',
+      name: 'serials',
+      component: () => import('@/views/SerialsView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/serials/:id',
+      name: 'serial-detail',
+      component: () => import('@/views/SerialDetailView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/discover',
       name: 'discover',
       component: () => import('@/views/DiscoverView.vue'),

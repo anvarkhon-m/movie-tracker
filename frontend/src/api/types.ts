@@ -52,6 +52,47 @@ export interface MovieFilterParams {
   size?: number
 }
 
+export interface SerialResponse {
+  id: number
+  tmdbId: number | null
+  title: string
+  releaseYear: number | null
+  genres: string[]
+  director: string | null
+  imdbRating: number | null
+  personalRating: number | null
+  seasonCount: number | null
+  episodeCount: number | null
+  platform: string | null
+  watchUrl: string | null
+  serialStatus: SerialStatus | null
+  watchStatus: WatchStatus
+  personalNote: string | null
+  posterUrl: string | null
+  language: string | null
+  country: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+export interface EpisodeResponse {
+  id: number
+  seasonNo: number
+  episodeNo: number
+  title: string | null
+  durationMin: number | null
+  personalNote: string | null
+  watched: boolean
+}
+
+export interface EpisodeRequest {
+  seasonNo: number
+  episodeNo: number
+  title?: string
+  durationMin?: number
+  personalNote?: string
+}
+
 export interface WatchHistoryResponse {
   id: number
   watchedAt: string
