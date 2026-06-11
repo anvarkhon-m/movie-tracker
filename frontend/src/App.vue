@@ -1,21 +1,10 @@
 <script setup lang="ts">
-import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { RouterLink, RouterView } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
-import { setLocale, type AppLocale } from '@/i18n'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const auth = useAuthStore()
-const router = useRouter()
-
-function logout(): void {
-  auth.logout()
-  void router.push({ name: 'login' })
-}
-
-function changeLocale(event: Event): void {
-  setLocale((event.target as HTMLSelectElement).value as AppLocale)
-}
 </script>
 
 <template>
@@ -30,14 +19,7 @@ function changeLocale(event: Event): void {
         <RouterLink to="/stats">{{ t('nav.stats') }}</RouterLink>
         <RouterLink to="/discover">{{ t('nav.discover') }}</RouterLink>
       </nav>
-      <div class="actions">
-        <select :value="locale" @change="changeLocale">
-          <option value="uz">UZ</option>
-          <option value="ru">RU</option>
-          <option value="en">EN</option>
-        </select>
-        <button @click="logout">{{ t('nav.logout') }}</button>
-      </div>
+      <RouterLink to="/profile" class="profile-link">{{ t('nav.profile') }}</RouterLink>
     </header>
 
     <main class="content">
@@ -51,12 +33,15 @@ function changeLocale(event: Event): void {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
   padding: 0.8rem 1.5rem;
   border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+  flex-wrap: wrap;
 }
 .nav {
   display: flex;
   gap: 1.2rem;
+  flex-wrap: wrap;
 }
 .nav a {
   font-weight: 500;
@@ -64,10 +49,12 @@ function changeLocale(event: Event): void {
 .nav a.router-link-active {
   text-decoration: underline;
 }
-.actions {
-  display: flex;
-  gap: 0.6rem;
-  align-items: center;
+.profile-link {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.profile-link.router-link-active {
+  text-decoration: underline;
 }
 .content {
   padding: 1.5rem;
