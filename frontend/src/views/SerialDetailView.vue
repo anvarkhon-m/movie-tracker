@@ -50,12 +50,14 @@ const edit = reactive<{
   watchStatus: WatchStatus
   serialStatus: SerialStatus
   platform: string
+  language: string
   personalNote: string
 }>({
   personalRating: null,
   watchStatus: 'PLAN_TO_WATCH',
   serialStatus: 'ONGOING',
   platform: '',
+  language: '',
   personalNote: '',
 })
 
@@ -65,6 +67,7 @@ function startEdit(): void {
   edit.watchStatus = serial.value.watchStatus
   edit.serialStatus = serial.value.serialStatus ?? 'ONGOING'
   edit.platform = serial.value.platform ?? ''
+  edit.language = serial.value.language ?? ''
   edit.personalNote = serial.value.personalNote ?? ''
   editing.value = true
 }
@@ -86,7 +89,7 @@ async function saveEdit(): Promise<void> {
     serialStatus: edit.serialStatus,
     watchStatus: edit.watchStatus,
     personalNote: edit.personalNote || null,
-    language: s.language,
+    language: edit.language || null,
     country: s.country,
   })
   editing.value = false
@@ -177,6 +180,10 @@ async function onDeleteSerial(): Promise<void> {
               <dt>{{ t('detail.personal') }}</dt>
               <dd>⭐ {{ serial.personalRating }}</dd>
             </template>
+            <template v-if="serial.language">
+              <dt>{{ t('detail.watchedLanguage') }}</dt>
+              <dd>{{ serial.language }}</dd>
+            </template>
           </dl>
 
           <p v-if="serial.personalNote" class="note">{{ serial.personalNote }}</p>
@@ -202,6 +209,9 @@ async function onDeleteSerial(): Promise<void> {
             </label>
             <label>{{ t('edit.platform') }}
               <input v-model="edit.platform" />
+            </label>
+            <label>{{ t('edit.watchedLanguage') }}
+              <input v-model="edit.language" :placeholder="t('edit.watchedLanguageHint')" />
             </label>
             <label>{{ t('edit.note') }}
               <textarea v-model="edit.personalNote" rows="3"></textarea>

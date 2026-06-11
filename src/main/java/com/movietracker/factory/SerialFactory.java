@@ -35,7 +35,8 @@ public class SerialFactory {
                 .serialStatus(request.serialStatus() != null ? request.serialStatus() : details.serialStatus())
                 .watchStatus(request.watchStatus() != null ? request.watchStatus() : WatchStatus.PLAN_TO_WATCH)
                 .personalNote(request.personalNote())
-                .language(request.language() != null ? request.language() : details.language())
+                // language — ko'rilgan til (foydalanuvchi kiritadi), TMDB original tili emas
+                .language(request.language())
                 .country(request.country() != null ? request.country() : details.country())
                 .build();
     }

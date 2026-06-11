@@ -48,14 +48,16 @@ const edit = reactive<{
   personalRating: number | null
   status: WatchStatus
   platform: string
+  language: string
   personalNote: string
-}>({ personalRating: null, status: 'PLAN_TO_WATCH', platform: '', personalNote: '' })
+}>({ personalRating: null, status: 'PLAN_TO_WATCH', platform: '', language: '', personalNote: '' })
 
 function startEdit(): void {
   if (!movie.value) return
   edit.personalRating = movie.value.personalRating
   edit.status = movie.value.status
   edit.platform = movie.value.platform ?? ''
+  edit.language = movie.value.language ?? ''
   edit.personalNote = movie.value.personalNote ?? ''
   editing.value = true
 }
@@ -75,7 +77,7 @@ async function saveEdit(): Promise<void> {
     watchUrl: m.watchUrl,
     status: edit.status,
     personalNote: edit.personalNote || null,
-    language: m.language,
+    language: edit.language || null,
     country: m.country,
   })
   editing.value = false
@@ -165,6 +167,10 @@ async function onDeleteMovie(): Promise<void> {
               <dt>{{ t('detail.platform') }}</dt>
               <dd>{{ movie.platform }}</dd>
             </template>
+            <template v-if="movie.language">
+              <dt>{{ t('detail.watchedLanguage') }}</dt>
+              <dd>{{ movie.language }}</dd>
+            </template>
           </dl>
 
           <p v-if="movie.personalNote" class="note">{{ movie.personalNote }}</p>
@@ -185,6 +191,9 @@ async function onDeleteMovie(): Promise<void> {
             </label>
             <label>{{ t('edit.platform') }}
               <input v-model="edit.platform" />
+            </label>
+            <label>{{ t('edit.watchedLanguage') }}
+              <input v-model="edit.language" :placeholder="t('edit.watchedLanguageHint')" />
             </label>
             <label>{{ t('edit.note') }}
               <textarea v-model="edit.personalNote" rows="3"></textarea>

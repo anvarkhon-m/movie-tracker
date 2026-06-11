@@ -57,8 +57,13 @@ Rasmlarni o'zimizda saqlash — mustaqillik va ishonchlilik.
 
 ### TMDB API tanlandi
 **Sabab:** Bepul, keng ma'lumotlar bazasi. Kino nomidan kelib chiqib
-title, director, rating, genres, poster, country, language — hammasini avtomatik to'ldiradi.
-Foydalanuvchi faqat platform, personal_rating, note qo'shadi.
+title, director, rating, genres, poster, country — avtomatik to'ldiradi.
+Foydalanuvchi platform, personal_rating, note va `language` qo'shadi.
+
+### `language` — ko'rilgan til (original til emas)
+**Sabab:** Foydalanuvchi kontentni qaysi tilda ko'rganini qayd qiladi (masalan,
+koreys filmini rus dublyajida). TMDB ning original tili emas — shuning uchun
+TMDB dan avtomatik to'ldirilmaydi, faqat foydalanuvchi kiritadi/tahrirlaydi.
 
 ### Flyway tanlandi (Liquibase emas)
 **Sabab:** Sodda SQL migration lar uchun Flyway yetarli va oson.

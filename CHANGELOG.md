@@ -210,6 +210,11 @@
 - Natija: bir sarlavha kuniga ≈1 OMDb chaqiruv, spam himoyalangan
 - Sinov: V2 migration + schema validate (Testcontainers) — o'tdi
 
+### `language` = ko'rilgan til
+- TMDB original tilini saqlamaydi endi — `language` foydalanuvchi ko'rgan til
+- Factory lar TMDB tilidan to'ldirmaydi; detail edit formaga "Ko'rilgan til" maydoni qo'shildi
+- Facts da ko'rsatiladi; i18n (uz/ru/en)
+
 ---
 
 <!-- 

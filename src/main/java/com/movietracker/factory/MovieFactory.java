@@ -33,7 +33,8 @@ public class MovieFactory {
                 .watchUrl(request.watchUrl())
                 .status(request.status() != null ? request.status() : WatchStatus.PLAN_TO_WATCH)
                 .personalNote(request.personalNote())
-                .language(request.language() != null ? request.language() : details.language())
+                // language — ko'rilgan til (foydalanuvchi kiritadi), TMDB original tili emas
+                .language(request.language())
                 .country(request.country() != null ? request.country() : details.country())
                 .build();
     }
