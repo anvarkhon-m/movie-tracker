@@ -2,6 +2,8 @@
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useSerials } from '@/composables/useSerials'
+import FilterBar from '@/components/FilterBar.vue'
+import type { ListFilter } from '@/api/types'
 
 const { t } = useI18n()
 const { serials, loading, error, fetchSerials } = useSerials()
@@ -9,11 +11,17 @@ const { serials, loading, error, fetchSerials } = useSerials()
 onMounted(() => {
   void fetchSerials({ page: 0, size: 20 })
 })
+
+function onFilter(filter: ListFilter): void {
+  void fetchSerials({ ...filter, page: 0, size: 20 })
+}
 </script>
 
 <template>
   <section class="serials">
     <h1>{{ t('serials.title') }}</h1>
+
+    <FilterBar @change="onFilter" />
 
     <p v-if="loading">{{ t('movies.loading') }}</p>
     <p v-else-if="error" class="error">{{ t('movies.error') }}: {{ error }}</p>

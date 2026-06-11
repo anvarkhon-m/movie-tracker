@@ -20,6 +20,13 @@ const messages = {
       error: 'Xatolik yuz berdi',
       rating: 'Reyting',
     },
+    filter: {
+      search: 'Qidirish...',
+      allStatuses: 'Barcha holatlar',
+      genre: 'Janr',
+      minRating: 'Min reyting',
+      reset: 'Tozalash',
+    },
     status: {
       PLAN_TO_WATCH: 'Rejada',
       WATCHING: 'Ko\'rilmoqda',
@@ -104,6 +111,13 @@ const messages = {
       error: 'Произошла ошибка',
       rating: 'Рейтинг',
     },
+    filter: {
+      search: 'Поиск...',
+      allStatuses: 'Все статусы',
+      genre: 'Жанр',
+      minRating: 'Мин рейтинг',
+      reset: 'Сбросить',
+    },
     status: {
       PLAN_TO_WATCH: 'В планах',
       WATCHING: 'Смотрю',
@@ -187,6 +201,13 @@ const messages = {
       loading: 'Loading...',
       error: 'Something went wrong',
       rating: 'Rating',
+    },
+    filter: {
+      search: 'Search...',
+      allStatuses: 'All statuses',
+      genre: 'Genre',
+      minRating: 'Min rating',
+      reset: 'Reset',
     },
     status: {
       PLAN_TO_WATCH: 'Plan to watch',

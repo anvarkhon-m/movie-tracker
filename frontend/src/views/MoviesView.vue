@@ -2,6 +2,8 @@
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useMovies } from '@/composables/useMovies'
+import FilterBar from '@/components/FilterBar.vue'
+import type { ListFilter } from '@/api/types'
 
 const { t } = useI18n()
 const { movies, loading, error, fetchMovies } = useMovies()
@@ -9,11 +11,17 @@ const { movies, loading, error, fetchMovies } = useMovies()
 onMounted(() => {
   void fetchMovies({ page: 0, size: 20 })
 })
+
+function onFilter(filter: ListFilter): void {
+  void fetchMovies({ ...filter, page: 0, size: 20 })
+}
 </script>
 
 <template>
   <section class="movies">
     <h1>{{ t('movies.title') }}</h1>
+
+    <FilterBar @change="onFilter" />
 
     <p v-if="loading">{{ t('movies.loading') }}</p>
     <p v-else-if="error" class="error">{{ t('movies.error') }}: {{ error }}</p>

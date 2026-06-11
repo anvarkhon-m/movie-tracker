@@ -52,6 +52,66 @@ export interface MovieFilterParams {
   size?: number
 }
 
+// FilterBar komponenti emit qiladigan umumiy filtr (movie + serial).
+export interface ListFilter {
+  search?: string
+  status?: WatchStatus
+  genre?: string
+  minRating?: number
+}
+
+export interface MovieRequest {
+  tmdbId?: number | null
+  title: string
+  releaseYear?: number | null
+  genres?: string[]
+  director?: string | null
+  imdbRating?: number | null
+  personalRating?: number | null
+  durationMin?: number | null
+  platform?: string | null
+  watchUrl?: string | null
+  status?: WatchStatus
+  personalNote?: string | null
+  language?: string | null
+  country?: string | null
+}
+
+export interface SerialRequest {
+  tmdbId?: number | null
+  title: string
+  releaseYear?: number | null
+  genres?: string[]
+  director?: string | null
+  imdbRating?: number | null
+  personalRating?: number | null
+  seasonCount?: number | null
+  episodeCount?: number | null
+  platform?: string | null
+  watchUrl?: string | null
+  serialStatus?: SerialStatus | null
+  watchStatus?: WatchStatus
+  personalNote?: string | null
+  language?: string | null
+  country?: string | null
+}
+
+export interface GenreStat {
+  genre: string
+  count: number
+}
+
+export interface StatsResponse {
+  movieCount: number
+  serialCount: number
+  moviesByStatus: Record<WatchStatus, number>
+  serialsByStatus: Record<WatchStatus, number>
+  topGenres: GenreStat[]
+  averageMovieRating: number | null
+  averageSerialRating: number | null
+  moviesWatchedByYear: Record<string, number>
+}
+
 export interface SerialResponse {
   id: number
   tmdbId: number | null

@@ -1,9 +1,12 @@
 import { ref } from 'vue'
 import client from '@/api/client'
-import type { PagedModel, SerialResponse } from '@/api/types'
+import type { PagedModel, SerialResponse, WatchStatus } from '@/api/types'
 
 interface SerialListParams {
   search?: string
+  status?: WatchStatus
+  genre?: string
+  minRating?: number
   page?: number
   size?: number
 }
