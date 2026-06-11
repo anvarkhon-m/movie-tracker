@@ -31,11 +31,11 @@ tmdb:
   image-base-url: https://image.tmdb.org/t/p/w500
 
 minio:
-  endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
+  endpoint: ${MINIO_ENDPOINT:http://localhost:9100}
   access-key: ${MINIO_ACCESS_KEY:minioadmin}
   secret-key: ${MINIO_SECRET_KEY:minioadmin}
   bucket: movie-tracker
-  public-url: ${MINIO_PUBLIC_URL:http://localhost:9000}
+  public-url: ${MINIO_PUBLIC_URL:http://localhost:9100}
 
 app:
   frontend-url: ${FRONTEND_URL:http://localhost:5173}
