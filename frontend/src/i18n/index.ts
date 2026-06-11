@@ -5,7 +5,7 @@ const LOCALE_KEY = 'mt_locale'
 const messages = {
   uz: {
     app: { title: 'Movie Tracker' },
-    nav: { home: 'Bosh sahifa', movies: 'Kinolar', serials: 'Seriallar', discover: 'Topish', logout: 'Chiqish' },
+    nav: { home: 'Bosh sahifa', movies: 'Kinolar', serials: 'Seriallar', stats: 'Statistika', discover: 'Topish', logout: 'Chiqish' },
     login: {
       title: 'Movie Tracker ga kirish',
       google: 'Google bilan kirish',
@@ -93,10 +93,22 @@ const messages = {
       markWatched: 'Ko\'rildi deb belgilash',
       watched: 'Ko\'rilgan ✓',
     },
+    stats: {
+      title: 'Statistika',
+      movies: 'Kinolar',
+      serials: 'Seriallar',
+      avgMovie: 'O\'rtacha (kino)',
+      avgSerial: 'O\'rtacha (serial)',
+      movieStatus: 'Kinolar holati bo\'yicha',
+      serialStatus: 'Seriallar holati bo\'yicha',
+      topGenres: 'Eng ko\'p janrlar',
+      watchedByYear: 'Yillar bo\'yicha ko\'rishlar',
+      noData: 'Ma\'lumot yo\'q',
+    },
   },
   ru: {
     app: { title: 'Movie Tracker' },
-    nav: { home: 'Главная', movies: 'Фильмы', serials: 'Сериалы', discover: 'Поиск', logout: 'Выйти' },
+    nav: { home: 'Главная', movies: 'Фильмы', serials: 'Сериалы', stats: 'Статистика', discover: 'Поиск', logout: 'Выйти' },
     login: {
       title: 'Вход в Movie Tracker',
       google: 'Войти через Google',
@@ -184,10 +196,22 @@ const messages = {
       markWatched: 'Отметить просмотренным',
       watched: 'Просмотрен ✓',
     },
+    stats: {
+      title: 'Статистика',
+      movies: 'Фильмы',
+      serials: 'Сериалы',
+      avgMovie: 'Средняя (фильмы)',
+      avgSerial: 'Средняя (сериалы)',
+      movieStatus: 'Фильмы по статусу',
+      serialStatus: 'Сериалы по статусу',
+      topGenres: 'Топ жанров',
+      watchedByYear: 'Просмотры по годам',
+      noData: 'Нет данных',
+    },
   },
   en: {
     app: { title: 'Movie Tracker' },
-    nav: { home: 'Home', movies: 'Movies', serials: 'Serials', discover: 'Discover', logout: 'Logout' },
+    nav: { home: 'Home', movies: 'Movies', serials: 'Serials', stats: 'Stats', discover: 'Discover', logout: 'Logout' },
     login: {
       title: 'Sign in to Movie Tracker',
       google: 'Sign in with Google',
@@ -274,6 +298,18 @@ const messages = {
       duration: 'Minutes',
       markWatched: 'Mark watched',
       watched: 'Watched ✓',
+    },
+    stats: {
+      title: 'Statistics',
+      movies: 'Movies',
+      serials: 'Serials',
+      avgMovie: 'Avg (movies)',
+      avgSerial: 'Avg (serials)',
+      movieStatus: 'Movies by status',
+      serialStatus: 'Serials by status',
+      topGenres: 'Top genres',
+      watchedByYear: 'Watched by year',
+      noData: 'No data',
     },
   },
 }
