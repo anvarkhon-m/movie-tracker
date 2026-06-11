@@ -98,6 +98,43 @@
 
 ---
 
+## 2026-06-11 — Session 4: Frontend skelet (vertical slice)
+
+### Qilinganlar
+- GitHub remote ulandi va push qilindi: github.com/anvarkhon-m/movie-tracker
+- **Frontend scaffold:** `frontend/` — Vite + Vue 3 + TypeScript
+  - Qo'shildi: Pinia, vue-router, vue-i18n, axios
+  - `@` alias (`@/*` → `src/*`) vite + tsconfig da
+- **Dev proxy:** Vite `/api` → `localhost:8080` (frontend 5173, backend 8080 — bir origin)
+- **Infrastructure:**
+  - `api/client.ts` — axios instance, JWT request interceptor, 401 da logout+login redirect
+  - `api/types.ts` — backend DTO lariga mos tiplar (no `any`)
+  - `stores/auth.ts` — Pinia auth store (token localStorage da, fetchMe, logout)
+  - `router/index.ts` — route guard (requiresAuth)
+  - `i18n/` — uz/ru/en, til localStorage da saqlanadi
+- **Vertical slice (auth + movies):**
+  - `LoginView` — Google login tugmasi + dev token paste (Google kaliti yo'qligi uchun)
+  - `AuthCallbackView` — `?token=` ni o'qib saqlaydi
+  - `composables/useMovies.ts` — `GET /api/v1/movies`
+  - `MoviesView` — poster grid, status, rating
+  - `HomeView` — dashboard placeholder
+  - `App.vue` — nav shell + til tanlash + logout
+- `npm run build` (vue-tsc + vite) — **muvaffaqiyatli**, route lar code-split
+
+### Muammolar va yechimlar
+- Muammo: TS 7.0 da `baseUrl` deprecated.
+  Yechim: `baseUrl` olib tashlandi, `paths` o'zi yetarli (TS 5+).
+
+### Keyingi session uchun
+- [ ] Jonli sinov: `./run-dev.sh` (backend) + `npm run dev` (frontend), dev token bilan kirish
+- [ ] Movie detail sahifa + watch history UI
+- [ ] Serials ro'yxati + detail + epizodlar
+- [ ] Filter/search UI (movies)
+- [ ] Statistics sahifa (`/stats` endpoint dan grafiklar)
+- [ ] TMDB qidiruv (Discover) sahifa + kino qo'shish formasi
+
+---
+
 <!-- 
 Keyingi session shablon:
 
