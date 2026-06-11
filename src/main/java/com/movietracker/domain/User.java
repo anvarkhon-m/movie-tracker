@@ -48,6 +48,16 @@ public class User {
         this.avatarUrl = avatarUrl;
     }
 
+    /**
+     * Mavjud akkauntni (email bo'yicha topilgan) Google akkaunt bilan bog'laydi.
+     * Google email ni tasdiqlagani uchun bu xavfsiz "account linking".
+     */
+    public void linkGoogleAccount(String googleId, String name, String avatarUrl) {
+        this.googleId = googleId;
+        this.name = name;
+        this.avatarUrl = avatarUrl;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

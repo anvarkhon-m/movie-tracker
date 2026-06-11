@@ -26,12 +26,17 @@ public class AuthService {
                     user.updateProfile(name, avatarUrl);
                     return user;
                 })
-                .orElseGet(() -> userRepository.save(User.builder()
-                        .googleId(googleId)
-                        .email(email)
-                        .name(name)
-                        .avatarUrl(avatarUrl)
-                        .build()));
+                .orElseGet(() -> userRepository.findByEmail(email)
+                        .map(user -> {
+                            user.linkGoogleAccount(googleId, name, avatarUrl);
+                            return user;
+                        })
+                        .orElseGet(() -> userRepository.save(User.builder()
+                                .googleId(googleId)
+                                .email(email)
+                                .name(name)
+                                .avatarUrl(avatarUrl)
+                                .build())));
     }
 
     @Transactional(readOnly = true)
