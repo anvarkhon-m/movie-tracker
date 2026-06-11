@@ -5,7 +5,7 @@ const LOCALE_KEY = 'mt_locale'
 const messages = {
   uz: {
     app: { title: 'Movie Tracker' },
-    nav: { home: 'Bosh sahifa', movies: 'Kinolar', serials: 'Seriallar', stats: 'Statistika', discover: 'Topish', logout: 'Chiqish' },
+    nav: { home: 'Bosh sahifa', movies: 'Kinolar', serials: 'Seriallar', watchlist: 'Ro\'yxat', favorites: 'Sevimlilar', stats: 'Statistika', discover: 'Topish', logout: 'Chiqish' },
     login: {
       title: 'Movie Tracker ga kirish',
       google: 'Google bilan kirish',
@@ -32,6 +32,14 @@ const messages = {
       continueWatching: 'Ko\'rishda davom eting',
       nothingWatching: 'Hozir ko\'rilayotgan kontent yo\'q',
       goDiscover: 'TMDB dan topish →',
+    },
+    watchlist: {
+      title: 'Ko\'rish ro\'yxati',
+      empty: 'Rejadagi kontent yo\'q',
+    },
+    favorites: {
+      title: 'Sevimlilar',
+      empty: 'Hali baho qo\'yilmagan',
     },
     status: {
       PLAN_TO_WATCH: 'Rejada',
@@ -129,7 +137,7 @@ const messages = {
   },
   ru: {
     app: { title: 'Movie Tracker' },
-    nav: { home: 'Главная', movies: 'Фильмы', serials: 'Сериалы', stats: 'Статистика', discover: 'Поиск', logout: 'Выйти' },
+    nav: { home: 'Главная', movies: 'Фильмы', serials: 'Сериалы', watchlist: 'Список', favorites: 'Избранное', stats: 'Статистика', discover: 'Поиск', logout: 'Выйти' },
     login: {
       title: 'Вход в Movie Tracker',
       google: 'Войти через Google',
@@ -156,6 +164,14 @@ const messages = {
       continueWatching: 'Продолжить просмотр',
       nothingWatching: 'Сейчас ничего не смотрится',
       goDiscover: 'Найти в TMDB →',
+    },
+    watchlist: {
+      title: 'Список просмотра',
+      empty: 'Нет запланированного',
+    },
+    favorites: {
+      title: 'Избранное',
+      empty: 'Оценок пока нет',
     },
     status: {
       PLAN_TO_WATCH: 'В планах',
@@ -253,7 +269,7 @@ const messages = {
   },
   en: {
     app: { title: 'Movie Tracker' },
-    nav: { home: 'Home', movies: 'Movies', serials: 'Serials', stats: 'Stats', discover: 'Discover', logout: 'Logout' },
+    nav: { home: 'Home', movies: 'Movies', serials: 'Serials', watchlist: 'Watchlist', favorites: 'Favorites', stats: 'Stats', discover: 'Discover', logout: 'Logout' },
     login: {
       title: 'Sign in to Movie Tracker',
       google: 'Sign in with Google',
@@ -280,6 +296,14 @@ const messages = {
       continueWatching: 'Continue watching',
       nothingWatching: 'Nothing in progress right now',
       goDiscover: 'Discover on TMDB →',
+    },
+    watchlist: {
+      title: 'Watchlist',
+      empty: 'Nothing planned yet',
+    },
+    favorites: {
+      title: 'Favorites',
+      empty: 'No ratings yet',
     },
     status: {
       PLAN_TO_WATCH: 'Plan to watch',

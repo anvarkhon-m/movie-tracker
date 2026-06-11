@@ -25,6 +25,8 @@ function changeLocale(event: Event): void {
         <RouterLink to="/">{{ t('nav.home') }}</RouterLink>
         <RouterLink to="/movies">{{ t('nav.movies') }}</RouterLink>
         <RouterLink to="/serials">{{ t('nav.serials') }}</RouterLink>
+        <RouterLink to="/watchlist">{{ t('nav.watchlist') }}</RouterLink>
+        <RouterLink to="/favorites">{{ t('nav.favorites') }}</RouterLink>
         <RouterLink to="/stats">{{ t('nav.stats') }}</RouterLink>
         <RouterLink to="/discover">{{ t('nav.discover') }}</RouterLink>
       </nav>

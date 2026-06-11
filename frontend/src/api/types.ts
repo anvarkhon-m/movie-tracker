@@ -179,3 +179,13 @@ export interface TmdbSummary {
 }
 
 export type DiscoverType = 'movie' | 'serial'
+
+// MediaGrid komponenti uchun umumiy element (movie/serial aralash).
+export interface MediaItem {
+  key: string
+  title: string
+  posterUrl: string | null
+  kind: 'movie' | 'serial'
+  to: { name: string; params: { id: number } }
+  badge?: string
+}
