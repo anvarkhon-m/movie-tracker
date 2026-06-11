@@ -21,18 +21,20 @@ onMounted(() => {
 
     <ul v-else class="grid">
       <li v-for="movie in movies" :key="movie.id" class="card">
-        <img v-if="movie.posterUrl" :src="movie.posterUrl" :alt="movie.title" class="poster" />
-        <div v-else class="poster placeholder">🎬</div>
-        <div class="meta">
-          <h3>{{ movie.title }}</h3>
-          <p class="sub">
-            <span v-if="movie.releaseYear">{{ movie.releaseYear }}</span>
-            <span class="status">{{ t(`status.${movie.status}`) }}</span>
-          </p>
-          <p v-if="movie.personalRating != null" class="rating">
-            ⭐ {{ movie.personalRating }}
-          </p>
-        </div>
+        <RouterLink :to="{ name: 'movie-detail', params: { id: movie.id } }" class="card-link">
+          <img v-if="movie.posterUrl" :src="movie.posterUrl" :alt="movie.title" class="poster" />
+          <div v-else class="poster placeholder">🎬</div>
+          <div class="meta">
+            <h3>{{ movie.title }}</h3>
+            <p class="sub">
+              <span v-if="movie.releaseYear">{{ movie.releaseYear }}</span>
+              <span class="status">{{ t(`status.${movie.status}`) }}</span>
+            </p>
+            <p v-if="movie.personalRating != null" class="rating">
+              ⭐ {{ movie.personalRating }}
+            </p>
+          </div>
+        </RouterLink>
       </li>
     </ul>
   </section>
@@ -55,6 +57,14 @@ onMounted(() => {
   border: 1px solid rgba(128, 128, 128, 0.3);
   border-radius: 8px;
   overflow: hidden;
+  transition: border-color 0.2s;
+}
+.card:hover {
+  border-color: #646cff;
+}
+.card-link {
+  display: block;
+  color: inherit;
 }
 .poster {
   width: 100%;

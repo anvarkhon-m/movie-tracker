@@ -149,11 +149,20 @@
   - Jonli sinov: `/api/v1/tmdb/search/movies?query=Inception` → natija qaytdi
 - `npm run build` — muvaffaqiyatli
 
+### Movie detail sahifa (qo'shildi)
+- `useMovie` composable — movie + history yuklash, watch qo'shish/o'chirish, movie o'chirish
+- `MovieDetailView` (`/movies/:id`) — to'liq ma'lumot, ko'rish tarixi (qo'shish formasi + o'chirish), kinoni o'chirish
+- MoviesView kartalari endi detail ga link
+- Jonli sinov (to'liq zanjir tasdiqlandi):
+  - POST /movies {tmdbId:27205} → Inception qo'shildi, poster MinIO ga saqlandi
+  - MinIO poster public: HTTP 200, image/jpeg, 105 KB
+  - POST history → recordWatch ishladi: watchCount=1, status=COMPLETED
+
 ### Keyingi session uchun
-- [ ] Movie detail sahifa + watch history UI
 - [ ] Serials ro'yxati + detail + epizodlar
 - [ ] Filter/search UI (movies)
 - [ ] Statistics sahifa (`/stats` dan grafiklar)
+- [ ] Movie detail: shaxsiy baho/status/izoh tahrirlash (hozir faqat ko'rsatiladi)
 
 ---
 

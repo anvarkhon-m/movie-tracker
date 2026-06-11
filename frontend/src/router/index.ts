@@ -17,6 +17,12 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: '/movies/:id',
+      name: 'movie-detail',
+      component: () => import('@/views/MovieDetailView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/discover',
       name: 'discover',
       component: () => import('@/views/DiscoverView.vue'),

@@ -52,6 +52,19 @@ export interface MovieFilterParams {
   size?: number
 }
 
+export interface WatchHistoryResponse {
+  id: number
+  watchedAt: string
+  platform: string | null
+  note: string | null
+}
+
+export interface WatchHistoryRequest {
+  watchedAt: string
+  platform?: string
+  note?: string
+}
+
 // TMDB qidiruv natijasi (movie va serial uchun bir xil shakl).
 export interface TmdbSummary {
   tmdbId: number
