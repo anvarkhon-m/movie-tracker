@@ -6,7 +6,7 @@ const messages = {
   uz: {
     app: { title: 'Movie Tracker' },
     nav: { home: 'Bosh sahifa', movies: 'Kinolar', serials: 'Seriallar', watchlist: 'Ro\'yxat', favorites: 'Sevimlilar', stats: 'Statistika', discover: 'Topish', profile: 'Profil', logout: 'Chiqish' },
-    profile: { language: 'Til' },
+    profile: { language: 'Til', theme: 'Mavzu', dark: 'Tungi', light: 'Kunduzgi' },
     login: {
       title: 'Movie Tracker ga kirish',
       google: 'Google bilan kirish',
@@ -139,7 +139,7 @@ const messages = {
   ru: {
     app: { title: 'Movie Tracker' },
     nav: { home: 'Главная', movies: 'Фильмы', serials: 'Сериалы', watchlist: 'Список', favorites: 'Избранное', stats: 'Статистика', discover: 'Поиск', profile: 'Профиль', logout: 'Выйти' },
-    profile: { language: 'Язык' },
+    profile: { language: 'Язык', theme: 'Тема', dark: 'Тёмная', light: 'Светлая' },
     login: {
       title: 'Вход в Movie Tracker',
       google: 'Войти через Google',
@@ -272,7 +272,7 @@ const messages = {
   en: {
     app: { title: 'Movie Tracker' },
     nav: { home: 'Home', movies: 'Movies', serials: 'Serials', watchlist: 'Watchlist', favorites: 'Favorites', stats: 'Stats', discover: 'Discover', profile: 'Profile', logout: 'Logout' },
-    profile: { language: 'Language' },
+    profile: { language: 'Language', theme: 'Theme', dark: 'Dark', light: 'Light' },
     login: {
       title: 'Sign in to Movie Tracker',
       google: 'Sign in with Google',

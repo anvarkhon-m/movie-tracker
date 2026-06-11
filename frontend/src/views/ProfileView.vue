@@ -3,10 +3,12 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+import { useSettingsStore } from '@/stores/settings'
 import { setLocale, type AppLocale } from '@/i18n'
 
 const { t, locale } = useI18n()
 const auth = useAuthStore()
+const settings = useSettingsStore()
 const router = useRouter()
 
 onMounted(() => {
@@ -45,6 +47,12 @@ function logout(): void {
           <option value="en">English</option>
         </select>
       </label>
+      <div class="row">
+        <span>{{ t('profile.theme') }}</span>
+        <button class="theme-btn" @click="settings.toggle">
+          {{ settings.theme === 'dark' ? `🌙 ${t('profile.dark')}` : `☀️ ${t('profile.light')}` }}
+        </button>
+      </div>
     </div>
 
     <button class="logout" @click="logout">{{ t('nav.logout') }}</button>
@@ -101,6 +109,13 @@ function logout(): void {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+}
+.row + .row {
+  margin-top: 0.8rem;
+}
+.theme-btn {
+  background: transparent;
+  border: 1px solid rgba(128, 128, 128, 0.4);
 }
 .logout {
   background: #b53737;

@@ -215,6 +215,24 @@
 - Factory lar TMDB tilidan to'ldirmaydi; detail edit formaga "Ko'rilgan til" maydoni qo'shildi
 - Facts da ko'rsatiladi; i18n (uz/ru/en)
 
+## 2026-06-11 — Session 8: Sahifalar to'plami + dark mode
+
+### Qilinganlar
+- **Home dashboard:** placeholder o'rniga — salom, statistika kartalari (/stats),
+  "ko'rishda davom eting" (WATCHING movie+serial)
+- **Watchlist** (`/watchlist`): PLAN_TO_WATCH; **Favorites** (`/favorites`):
+  personal rating bo'yicha saralangan — qayta ishlatiladigan `MediaGrid` komponenti
+- **Profile** (`/profile`): Google akkaunt (avatar, ism, email), til, chiqish;
+  til + logout top bar dan profilega ko'chirildi, top bar soddalashtirildi
+- **Dark mode:** `settingsStore` (Pinia) — `color-scheme` orqali, localStorage da saqlanadi,
+  Profile da ☀️/🌙 toggle; mount dan oldin qo'llanadi (flash yo'q)
+- Har bir qadam alohida commit, har biri `npm run build` bilan tekshirildi
+
+### Keyingi session uchun
+- [ ] Pagination UI (ro'yxatlar hozir 20/50 ta)
+- [ ] Backend: service-layer testlarni kengaytirish
+- [ ] Discover natijalarida "qo'shilgan" holatini ko'rsatish (allaqachon kutubxonada)
+
 ---
 
 <!-- 
