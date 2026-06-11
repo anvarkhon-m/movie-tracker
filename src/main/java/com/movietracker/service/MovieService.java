@@ -33,6 +33,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MovieService {
 
+    private static final java.time.Duration IMDB_REFRESH_COOLDOWN = java.time.Duration.ofHours(24);
+
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
     private final WatchHistoryMapper watchHistoryMapper;
@@ -93,6 +95,10 @@ public class MovieService {
         Movie movie = findOwned(id);
         if (movie.getTmdbId() == null) {
             throw new BadRequestException("Bu kino TMDB bilan bog'lanmagan — reyting yangilanmaydi");
+        }
+        // OMDb kunlik limitini saqlash uchun: bir kino kuniga bir marta yangilanadi.
+        if (movie.isImdbRatingFresh(IMDB_REFRESH_COOLDOWN)) {
+            return movieMapper.toResponse(movie);
         }
         TmdbMovieDetails details = tmdbFacade.getMovieDetails(movie.getTmdbId());
         movie.refreshImdbRating(details.imdbRating());

@@ -202,6 +202,14 @@
   - Frontend: detail sahifalarda IMDb yonida ⟳ tugma (null bo'lsa ham TMDB-linked bo'lsa ko'rinadi)
 - Sinov: OMDb tt1375666 → 8.8 (Google bilan mos)
 
+### OMDb kunlik limit himoyasi (1000/kun)
+- **24 soatlik cooldown:** Flyway `V2` — `imdb_rating_updated_at` ustuni (movie + serial)
+- `refreshImdbRating` 24 soat ichida yangilangan bo'lsa OMDb ni chaqirmaydi (no-op)
+- Domain: `isImdbRatingFresh(Duration)`; `refreshImdbRating` vaqtni belgilaydi
+- Response da `imdbRatingUpdatedAt` — frontend tugmani cooldown da o'chiradi (tooltip bilan)
+- Natija: bir sarlavha kuniga ≈1 OMDb chaqiruv, spam himoyalangan
+- Sinov: V2 migration + schema validate (Testcontainers) — o'tdi
+
 ---
 
 <!-- 

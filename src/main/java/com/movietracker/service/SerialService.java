@@ -34,6 +34,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SerialService {
 
+    private static final java.time.Duration IMDB_REFRESH_COOLDOWN = java.time.Duration.ofHours(24);
+
     private final SerialRepository serialRepository;
     private final EpisodeRepository episodeRepository;
     private final SerialMapper serialMapper;
@@ -96,6 +98,10 @@ public class SerialService {
         Serial serial = findOwned(id);
         if (serial.getTmdbId() == null) {
             throw new BadRequestException("Bu serial TMDB bilan bog'lanmagan — reyting yangilanmaydi");
+        }
+        // OMDb kunlik limitini saqlash uchun: bir serial kuniga bir marta yangilanadi.
+        if (serial.isImdbRatingFresh(IMDB_REFRESH_COOLDOWN)) {
+            return serialMapper.toResponse(serial);
         }
         TmdbSerialDetails details = tmdbFacade.getSerialDetails(serial.getTmdbId());
         serial.refreshImdbRating(details.imdbRating());

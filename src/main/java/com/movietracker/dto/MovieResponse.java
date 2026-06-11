@@ -25,6 +25,7 @@ public record MovieResponse(
         String language,
         String country,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        LocalDateTime imdbRatingUpdatedAt
 ) {
 }

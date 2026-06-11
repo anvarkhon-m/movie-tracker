@@ -25,6 +25,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -108,6 +109,9 @@ public class Movie {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "imdb_rating_updated_at")
+    private LocalDateTime imdbRatingUpdatedAt;
+
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<MovieWatchHistory> watchHistory = new ArrayList<>();
@@ -172,6 +176,12 @@ public class Movie {
 
     public void refreshImdbRating(BigDecimal imdbRating) {
         this.imdbRating = imdbRating;
+        this.imdbRatingUpdatedAt = LocalDateTime.now();
+    }
+
+    public boolean isImdbRatingFresh(Duration cooldown) {
+        return imdbRatingUpdatedAt != null
+                && imdbRatingUpdatedAt.isAfter(LocalDateTime.now().minus(cooldown));
     }
 
     public boolean belongsTo(Long userId) {

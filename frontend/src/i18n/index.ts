@@ -57,6 +57,7 @@ const messages = {
       delete: 'Kinoni o\'chirish',
       deleteConfirm: 'Bu kino o\'chirilsinmi?',
       refreshRating: 'IMDb reytingini yangilash',
+      ratingFresh: 'Reyting yaqinda yangilangan (kuniga bir marta)',
     },
     history: {
       title: 'Ko\'rish tarixi',
@@ -171,6 +172,7 @@ const messages = {
       delete: 'Удалить фильм',
       deleteConfirm: 'Удалить этот фильм?',
       refreshRating: 'Обновить рейтинг IMDb',
+      ratingFresh: 'Рейтинг недавно обновлён (раз в сутки)',
     },
     history: {
       title: 'История просмотров',
@@ -285,6 +287,7 @@ const messages = {
       delete: 'Delete movie',
       deleteConfirm: 'Delete this movie?',
       refreshRating: 'Refresh IMDb rating',
+      ratingFresh: 'Rating refreshed recently (once per day)',
     },
     history: {
       title: 'Watch history',

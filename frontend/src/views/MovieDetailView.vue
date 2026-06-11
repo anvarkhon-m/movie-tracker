@@ -23,6 +23,14 @@ const {
 
 const refreshingRating = ref(false)
 
+const COOLDOWN_MS = 24 * 60 * 60 * 1000
+
+// 24 soat ichida yangilangan bo'lsa — OMDb limitini saqlash uchun tugma o'chiriladi.
+const ratingOnCooldown = computed(() => {
+  const ts = movie.value?.imdbRatingUpdatedAt
+  return ts != null && Date.now() - new Date(ts).getTime() < COOLDOWN_MS
+})
+
 async function onRefreshRating(): Promise<void> {
   refreshingRating.value = true
   try {
@@ -141,8 +149,8 @@ async function onDeleteMovie(): Promise<void> {
                 <button
                   v-if="movie.tmdbId != null"
                   class="refresh"
-                  :disabled="refreshingRating"
-                  :title="t('detail.refreshRating')"
+                  :disabled="refreshingRating || ratingOnCooldown"
+                  :title="ratingOnCooldown ? t('detail.ratingFresh') : t('detail.refreshRating')"
                   @click="onRefreshRating"
                 >
                   {{ refreshingRating ? '…' : '⟳' }}

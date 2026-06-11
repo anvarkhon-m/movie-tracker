@@ -26,6 +26,13 @@ const id = computed(() => Number(route.params.id))
 
 const refreshingRating = ref(false)
 
+const COOLDOWN_MS = 24 * 60 * 60 * 1000
+
+const ratingOnCooldown = computed(() => {
+  const ts = serial.value?.imdbRatingUpdatedAt
+  return ts != null && Date.now() - new Date(ts).getTime() < COOLDOWN_MS
+})
+
 async function onRefreshRating(): Promise<void> {
   refreshingRating.value = true
   try {
@@ -158,8 +165,8 @@ async function onDeleteSerial(): Promise<void> {
                 <button
                   v-if="serial.tmdbId != null"
                   class="refresh"
-                  :disabled="refreshingRating"
-                  :title="t('detail.refreshRating')"
+                  :disabled="refreshingRating || ratingOnCooldown"
+                  :title="ratingOnCooldown ? t('detail.ratingFresh') : t('detail.refreshRating')"
                   @click="onRefreshRating"
                 >
                   {{ refreshingRating ? '…' : '⟳' }}

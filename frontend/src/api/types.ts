@@ -30,6 +30,7 @@ export interface MovieResponse {
   country: string | null
   createdAt: string
   updatedAt: string
+  imdbRatingUpdatedAt: string | null
 }
 
 // Spring `PagedModel` (pageSerializationMode = VIA_DTO) javob formati.
@@ -133,6 +134,7 @@ export interface SerialResponse {
   country: string | null
   createdAt: string
   updatedAt: string
+  imdbRatingUpdatedAt: string | null
 }
 
 export interface EpisodeResponse {
