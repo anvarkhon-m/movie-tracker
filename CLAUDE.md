@@ -334,6 +334,12 @@ POST   /api/v1/episodes/{id}/history
 DELETE /api/v1/episodes/{id}/history/{hid}
 ```
 
+### Statistika
+```
+GET /api/v1/stats   ← dashboard: kino/serial soni, status taqsimoti,
+                       top janrlar, o'rtacha personal rating, yillar bo'yicha ko'rishlar
+```
+
 ### Filter parametrlar (GET /movies va /serials)
 ```
 search=inception            ← title bo'yicha qidiruv

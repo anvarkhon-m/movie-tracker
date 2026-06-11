@@ -66,6 +66,38 @@
 
 ---
 
+## 2026-06-11 — Session 3: Swagger, smoke-test, statistika
+
+### Qilinganlar
+- **Swagger** qo'shildi: `springdoc-openapi`, `OpenApiConfig` (JWT bearer scheme),
+  `/swagger-ui.html` va `/v3/api-docs` security da permit qilindi
+- **OAuth bug tuzatildi:** authorization endpoint `/api/v1/auth` ni egallab,
+  `/api/v1/auth/me` ni `me` nomli client registration deb o'qiyotgan edi.
+  Endi default `/oauth2/authorization/google`, `/api/v1/auth/google` esa unga redirect qiladi.
+- **Dev tooling:** `README.md` (lokal qo'llanma), `run-dev.sh` (`.env` ni yuklaydi),
+  `.env` (gitignore) — TMDB kalit shu yerda, commit qilinmaydi
+- MinIO portlari 9100/9101 ga ko'chirildi (9000 band edi)
+- **Smoke-test:** JWT auth zanjiri (filter→controller), `/auth/me`, jonli TMDB qidiruv — ishladi
+- **Statistika endpoint:** `GET /api/v1/stats`
+  - `StatsResponse` (record): movie/serial soni, status taqsimoti (EnumMap, 0 bilan to'ldirilgan),
+    top-10 janr (movie+serial birlashtirilgan), o'rtacha personal rating, yillar bo'yicha ko'rishlar
+  - `StatsService` + `StatsController` + projection interfeyslar (StatusCount, GenreCount, YearCount)
+  - Native SQL: `unnest(genres)` janr taqsimoti uchun, `EXTRACT(YEAR FROM watched_at)` yillar uchun
+  - **5 ta integration test** (Testcontainers) — barchasi o'tdi
+
+### Muammolar va yechimlar
+- Muammo: TMDB "Invalid API key" — ilova `TMDB_API_KEY` env siz ishga tushirilgan edi.
+  Yechim: `./run-dev.sh` orqali `.env` dan yuklash (yoki IDE run config ga env qo'shish).
+- Muammo: `/auth/me` 401 (OAuth filter ushlab qolyapti).
+  Yechim: yuqoridagi OAuth endpoint o'zgarishi.
+
+### Keyingi session uchun
+- [ ] Frontend: Vue 3 + Pinia + vue-i18n (`frontend/`) — auth + movies ro'yxatidan boshlash
+- [ ] Service layer testlarini kengaytirish (MovieService/SerialService, ownership izolyatsiya)
+- [ ] Google OAuth real login (Google Cloud credentials kerak)
+
+---
+
 <!-- 
 Keyingi session shablon:
 
