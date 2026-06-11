@@ -51,3 +51,15 @@ export interface MovieFilterParams {
   page?: number
   size?: number
 }
+
+// TMDB qidiruv natijasi (movie va serial uchun bir xil shakl).
+export interface TmdbSummary {
+  tmdbId: number
+  title: string
+  releaseYear: number | null
+  posterUrl: string | null
+  rating: number | null
+  overview: string | null
+}
+
+export type DiscoverType = 'movie' | 'serial'

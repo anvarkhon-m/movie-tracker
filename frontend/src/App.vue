@@ -24,6 +24,7 @@ function changeLocale(event: Event): void {
       <nav class="nav">
         <RouterLink to="/">{{ t('nav.home') }}</RouterLink>
         <RouterLink to="/movies">{{ t('nav.movies') }}</RouterLink>
+        <RouterLink to="/discover">{{ t('nav.discover') }}</RouterLink>
       </nav>
       <div class="actions">
         <select :value="locale" @change="changeLocale">

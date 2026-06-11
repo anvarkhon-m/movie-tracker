@@ -5,7 +5,7 @@ const LOCALE_KEY = 'mt_locale'
 const messages = {
   uz: {
     app: { title: 'Movie Tracker' },
-    nav: { home: 'Bosh sahifa', movies: 'Kinolar', logout: 'Chiqish' },
+    nav: { home: 'Bosh sahifa', movies: 'Kinolar', discover: 'Topish', logout: 'Chiqish' },
     login: {
       title: 'Movie Tracker ga kirish',
       google: 'Google bilan kirish',
@@ -26,10 +26,22 @@ const messages = {
       COMPLETED: 'Ko\'rilgan',
       DROPPED: 'Tashlangan',
     },
+    discover: {
+      title: 'Topish (TMDB)',
+      movies: 'Kinolar',
+      serials: 'Seriallar',
+      placeholder: 'Nom bo\'yicha qidiring...',
+      searchBtn: 'Qidirish',
+      add: 'Qo\'shish',
+      adding: 'Qo\'shilmoqda...',
+      added: 'Qo\'shildi ✓',
+      empty: 'Hech narsa topilmadi',
+      hint: 'Qidiruvni boshlang',
+    },
   },
   ru: {
     app: { title: 'Movie Tracker' },
-    nav: { home: 'Главная', movies: 'Фильмы', logout: 'Выйти' },
+    nav: { home: 'Главная', movies: 'Фильмы', discover: 'Поиск', logout: 'Выйти' },
     login: {
       title: 'Вход в Movie Tracker',
       google: 'Войти через Google',
@@ -50,10 +62,22 @@ const messages = {
       COMPLETED: 'Просмотрено',
       DROPPED: 'Брошено',
     },
+    discover: {
+      title: 'Поиск (TMDB)',
+      movies: 'Фильмы',
+      serials: 'Сериалы',
+      placeholder: 'Искать по названию...',
+      searchBtn: 'Искать',
+      add: 'Добавить',
+      adding: 'Добавление...',
+      added: 'Добавлено ✓',
+      empty: 'Ничего не найдено',
+      hint: 'Начните поиск',
+    },
   },
   en: {
     app: { title: 'Movie Tracker' },
-    nav: { home: 'Home', movies: 'Movies', logout: 'Logout' },
+    nav: { home: 'Home', movies: 'Movies', discover: 'Discover', logout: 'Logout' },
     login: {
       title: 'Sign in to Movie Tracker',
       google: 'Sign in with Google',
@@ -73,6 +97,18 @@ const messages = {
       WATCHING: 'Watching',
       COMPLETED: 'Completed',
       DROPPED: 'Dropped',
+    },
+    discover: {
+      title: 'Discover (TMDB)',
+      movies: 'Movies',
+      serials: 'Serials',
+      placeholder: 'Search by title...',
+      searchBtn: 'Search',
+      add: 'Add',
+      adding: 'Adding...',
+      added: 'Added ✓',
+      empty: 'Nothing found',
+      hint: 'Start a search',
     },
   },
 }

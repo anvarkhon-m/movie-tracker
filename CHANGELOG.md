@@ -135,6 +135,28 @@
 
 ---
 
+## 2026-06-11 — Session 5: Google login jonli + Discover sahifa
+
+### Qilinganlar
+- **Google OAuth jonli ishladi** (real client credentials, brauzerda login tasdiqlandi)
+- **Bug fix:** `findOrCreateUser` faqat google_id bo'yicha qidirardi — mavjud email bilan
+  to'qnashganda 500 (duplicate email). Endi email bo'yicha fallback + Google akkauntni
+  bog'laydi (`linkGoogleAccount`). Dev token va Google login bir userga birlashdi.
+- **Discover sahifa (`/discover`):**
+  - `useDiscover` composable — TMDB qidiruv (movie/serial) + kutubxonaga qo'shish
+  - `DiscoverView` — type toggle, qidiruv, natija kartalari, "Qo'shish" tugmasi (added/adding holatlari)
+  - Route + nav link + i18n (uz/ru/en)
+  - Jonli sinov: `/api/v1/tmdb/search/movies?query=Inception` → natija qaytdi
+- `npm run build` — muvaffaqiyatli
+
+### Keyingi session uchun
+- [ ] Movie detail sahifa + watch history UI
+- [ ] Serials ro'yxati + detail + epizodlar
+- [ ] Filter/search UI (movies)
+- [ ] Statistics sahifa (`/stats` dan grafiklar)
+
+---
+
 <!-- 
 Keyingi session shablon:
 
