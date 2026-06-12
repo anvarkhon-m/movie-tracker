@@ -3,6 +3,7 @@ package com.movietracker.dto;
 import com.movietracker.domain.WatchStatus;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public record MovieResponse(
         String country,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
-        LocalDateTime imdbRatingUpdatedAt
+        LocalDateTime imdbRatingUpdatedAt,
+        LocalDate lastWatchedAt
 ) {
 }

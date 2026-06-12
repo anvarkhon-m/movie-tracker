@@ -20,6 +20,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
@@ -111,6 +112,10 @@ public class Movie {
 
     @Column(name = "imdb_rating_updated_at")
     private LocalDateTime imdbRatingUpdatedAt;
+
+    // Oxirgi ko'rilgan sana — watch history dan hisoblanadi (ro'yxat so'rovi bilan yuklanadi).
+    @Formula("(select max(mwh.watched_at) from movie_watch_history mwh where mwh.movie_id = id)")
+    private LocalDate lastWatchedAt;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

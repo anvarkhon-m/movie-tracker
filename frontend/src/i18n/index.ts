@@ -28,6 +28,11 @@ const messages = {
       minRating: 'Min reyting',
       reset: 'Tozalash',
     },
+    list: {
+      watched: 'Oxirgi ko\'rilgan',
+      runtime: 'Davomiyligi',
+      personal: 'Shaxsiy baho',
+    },
     home: {
       greeting: 'Salom',
       continueWatching: 'Ko\'rishda davom eting',
@@ -161,6 +166,11 @@ const messages = {
       minRating: 'Мин рейтинг',
       reset: 'Сбросить',
     },
+    list: {
+      watched: 'Последний просмотр',
+      runtime: 'Длительность',
+      personal: 'Личная оценка',
+    },
     home: {
       greeting: 'Привет',
       continueWatching: 'Продолжить просмотр',
@@ -293,6 +303,11 @@ const messages = {
       genre: 'Genre',
       minRating: 'Min rating',
       reset: 'Reset',
+    },
+    list: {
+      watched: 'Last watched',
+      runtime: 'Runtime',
+      personal: 'Personal rating',
     },
     home: {
       greeting: 'Hi',

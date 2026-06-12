@@ -20,12 +20,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +117,11 @@ public class Serial {
 
     @Column(name = "imdb_rating_updated_at")
     private LocalDateTime imdbRatingUpdatedAt;
+
+    // Oxirgi ko'rilgan sana — epizod watch history dan hisoblanadi.
+    @Formula("(select max(ewh.watched_at) from episode_watch_history ewh "
+            + "join episode ep on ep.id = ewh.episode_id where ep.serial_id = id)")
+    private LocalDate lastWatchedAt;
 
     @OneToMany(mappedBy = "serial", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

@@ -48,10 +48,25 @@ const SEVERITY: Record<WatchStatus, string> = {
         <div v-else class="thumb placeholder">
           <i :class="['pi', item.kind === 'movie' ? 'pi-video' : 'pi-desktop']" />
         </div>
-        <span class="row-title">{{ item.title }}</span>
-        <span v-if="item.releaseYear" class="muted year">{{ item.releaseYear }}</span>
-        <span v-if="item.imdbRating != null" class="rating"><i class="pi pi-star-fill" /> {{ item.imdbRating }}</span>
-        <Tag :value="t(`status.${item.status}`)" :severity="SEVERITY[item.status]" />
+        <div class="row-main">
+          <span class="row-title">{{ item.title }}</span>
+          <span v-if="item.releaseYear" class="muted year">{{ item.releaseYear }}</span>
+        </div>
+        <div class="row-meta">
+          <span v-if="item.lastWatchedAt" class="meta-cell watched" :title="t('list.watched')">
+            <i class="pi pi-calendar" /> {{ item.lastWatchedAt }}
+          </span>
+          <span v-if="item.durationMin" class="meta-cell runtime" :title="t('list.runtime')">
+            <i class="pi pi-clock" /> {{ item.durationMin }}m
+          </span>
+          <span v-if="item.personalRating != null" class="meta-cell personal" :title="t('list.personal')">
+            <i class="pi pi-star-fill" /> {{ item.personalRating }}
+          </span>
+          <span v-if="item.imdbRating != null" class="meta-cell imdb" :title="t('detail.imdb')">
+            IMDb {{ item.imdbRating }}
+          </span>
+          <Tag :value="t(`status.${item.status}`)" :severity="SEVERITY[item.status]" />
+        </div>
       </RouterLink>
     </li>
   </ul>
@@ -162,15 +177,50 @@ const SEVERITY: Record<WatchStatus, string> = {
   justify-content: center;
   color: var(--p-text-muted-color);
 }
+.row-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
 .row-title {
   font-weight: 600;
-  flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.year {
+.row-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
   flex-shrink: 0;
+}
+.meta-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+.watched,
+.runtime,
+.year {
+  color: var(--p-text-muted-color);
+}
+.personal {
+  color: #f5a623;
+  font-weight: 600;
+}
+.imdb {
+  color: var(--p-text-color);
+  font-weight: 600;
+  background: var(--p-surface-100);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+:global(.app-dark) .imdb {
+  background: var(--p-surface-800);
 }
 
 /* --- Shared --- */
@@ -183,6 +233,12 @@ const SEVERITY: Record<WatchStatus, string> = {
   font-weight: 600;
   font-size: 0.85rem;
   flex-shrink: 0;
+}
+@media (max-width: 720px) {
+  .watched,
+  .runtime {
+    display: none;
+  }
 }
 @media (max-width: 560px) {
   .year {

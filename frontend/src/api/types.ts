@@ -31,6 +31,7 @@ export interface MovieResponse {
   createdAt: string
   updatedAt: string
   imdbRatingUpdatedAt: string | null
+  lastWatchedAt: string | null
 }
 
 // Spring `PagedModel` (pageSerializationMode = VIA_DTO) javob formati.
@@ -135,6 +136,7 @@ export interface SerialResponse {
   createdAt: string
   updatedAt: string
   imdbRatingUpdatedAt: string | null
+  lastWatchedAt: string | null
 }
 
 export interface EpisodeResponse {
@@ -198,6 +200,9 @@ export interface CollectionItem {
   releaseYear: number | null
   status: WatchStatus
   imdbRating: number | null
+  personalRating: number | null
+  durationMin: number | null
+  lastWatchedAt: string | null
   kind: 'movie' | 'serial'
   to: { name: string; params: { id: number } }
 }
