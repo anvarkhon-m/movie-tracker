@@ -6,6 +6,9 @@ import { useAuthStore } from '@/stores/auth'
 const { t } = useI18n()
 const auth = useAuthStore()
 
+// Bu sahifalar keshlanadi — filtr/sort/qidiruv holati saqlanadi.
+const keepAlive = ['MoviesView', 'SerialsView', 'DiscoverView']
+
 const links = [
   { to: '/', key: 'home', icon: 'pi-home' },
   { to: '/movies', key: 'movies', icon: 'pi-video' },
@@ -33,7 +36,11 @@ const links = [
     </header>
 
     <main class="content">
-      <RouterView />
+      <RouterView v-slot="{ Component }">
+        <keep-alive :include="keepAlive">
+          <component :is="Component" />
+        </keep-alive>
+      </RouterView>
     </main>
   </div>
 </template>

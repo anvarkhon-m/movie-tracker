@@ -32,9 +32,9 @@ const gridStyle = computed(() => ({
           <div v-else class="poster placeholder">
             <i :class="['pi', item.kind === 'movie' ? 'pi-video' : 'pi-desktop']" />
           </div>
+          <Tag :value="t(`status.${item.status}`)" :severity="SEVERITY[item.status]" class="status-tag" />
         </div>
         <div class="meta">
-          <Tag :value="t(`status.${item.status}`)" :severity="SEVERITY[item.status]" class="status-tag" />
           <span class="title">{{ item.title }}</span>
           <div class="sub">
             <span v-if="item.releaseYear" class="muted">{{ item.releaseYear }}</span>
@@ -120,13 +120,14 @@ const gridStyle = computed(() => ({
   background: color-mix(in srgb, var(--p-text-color) 8%, transparent);
 }
 .meta {
-  padding: 0.7rem 0.8rem 0.85rem;
+  padding: 0.6rem 0.7rem 0.7rem;
   display: flex;
   flex-direction: column;
 }
 .status-tag {
-  align-self: flex-start;
-  margin-bottom: 0.5rem;
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
 }
 .title {
   font-weight: 600;
@@ -184,11 +185,17 @@ const gridStyle = computed(() => ({
 .scale-s {
   --thumb: 0px;
 }
+/* Keep thumb as a grid item (0-size) so the title column doesn't collapse */
 .scale-s .thumb {
-  display: none;
+  width: 0;
+  min-width: 0;
+  height: 0;
+  overflow: hidden;
+  border: 0;
 }
 .scale-s .row-link {
   padding: 0.35rem 0.9rem;
+  gap: 0.5rem;
 }
 .scale-l {
   --thumb: 60px;

@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onActivated, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useMovies } from '@/composables/useMovies'
+
+defineOptions({ name: 'MoviesView' })
 import { useSettingsStore } from '@/stores/settings'
 import FilterBar from '@/components/FilterBar.vue'
 import MediaCollection from '@/components/MediaCollection.vue'
@@ -50,7 +52,8 @@ function load(): void {
   void fetchMovies({ ...filter.value, page: page.value, size: pageSize.value, sort: sort.value })
 }
 
-onMounted(load)
+// Kept-alive: har faollashganda yangilanadi (holat saqlanadi, data yangilanadi).
+onActivated(load)
 
 function reload(): void {
   page.value = 0

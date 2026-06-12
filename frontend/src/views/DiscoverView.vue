@@ -11,6 +11,8 @@ import ProgressSpinner from 'primevue/progressspinner'
 import Message from 'primevue/message'
 import type { DiscoverType } from '@/api/types'
 
+defineOptions({ name: 'DiscoverView' })
+
 const { t } = useI18n()
 const { results, loading, error, searched, addingId, isAdded, search, add } = useDiscover()
 

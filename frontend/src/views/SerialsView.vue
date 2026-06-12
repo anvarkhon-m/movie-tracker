@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onActivated, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useSerials } from '@/composables/useSerials'
+
+defineOptions({ name: 'SerialsView' })
 import { useSettingsStore } from '@/stores/settings'
 import FilterBar from '@/components/FilterBar.vue'
 import MediaCollection from '@/components/MediaCollection.vue'
@@ -50,7 +52,7 @@ function load(): void {
   void fetchSerials({ ...filter.value, page: page.value, size: pageSize.value, sort: sort.value })
 }
 
-onMounted(load)
+onActivated(load)
 
 function reload(): void {
   page.value = 0
