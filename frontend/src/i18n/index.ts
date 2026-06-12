@@ -33,6 +33,14 @@ const messages = {
       runtime: 'Davomiyligi',
       personal: 'Shaxsiy baho',
     },
+    sort: {
+      added: 'Yangi qo\'shilgan',
+      yearDesc: 'Yil (yangi)',
+      yearAsc: 'Yil (eski)',
+      watched: 'Oxirgi ko\'rilgan',
+      imdb: 'IMDb reyting',
+      personal: 'Shaxsiy baho',
+    },
     home: {
       greeting: 'Salom',
       continueWatching: 'Ko\'rishda davom eting',
@@ -173,6 +181,14 @@ const messages = {
       runtime: 'Длительность',
       personal: 'Личная оценка',
     },
+    sort: {
+      added: 'Недавно добавленные',
+      yearDesc: 'Год (новые)',
+      yearAsc: 'Год (старые)',
+      watched: 'Последний просмотр',
+      imdb: 'Рейтинг IMDb',
+      personal: 'Личная оценка',
+    },
     home: {
       greeting: 'Привет',
       continueWatching: 'Продолжить просмотр',
@@ -311,6 +327,14 @@ const messages = {
     list: {
       watched: 'Last watched',
       runtime: 'Runtime',
+      personal: 'Personal rating',
+    },
+    sort: {
+      added: 'Recently added',
+      yearDesc: 'Year (newest)',
+      yearAsc: 'Year (oldest)',
+      watched: 'Last watched',
+      imdb: 'IMDb rating',
       personal: 'Personal rating',
     },
     home: {

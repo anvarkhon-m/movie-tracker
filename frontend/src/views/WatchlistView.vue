@@ -46,7 +46,7 @@ const items = computed<MediaItem[]>(() => [
 
 <style scoped>
 .page {
-  max-width: 1100px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 0.5rem 0 2rem;
 }

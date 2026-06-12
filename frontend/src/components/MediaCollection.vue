@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Tag from 'primevue/tag'
 import type { CollectionItem, ViewMode, WatchStatus } from '@/api/types'
 
-defineProps<{ items: CollectionItem[]; view: ViewMode }>()
+const props = withDefaults(
+  defineProps<{ items: CollectionItem[]; view: ViewMode; minCol?: number }>(),
+  { minCol: 168 },
+)
 
 const { t } = useI18n()
 
@@ -13,11 +17,15 @@ const SEVERITY: Record<WatchStatus, string> = {
   COMPLETED: 'success',
   DROPPED: 'danger',
 }
+
+const gridStyle = computed(() => ({
+  gridTemplateColumns: `repeat(auto-fill, minmax(${props.minCol}px, 1fr))`,
+}))
 </script>
 
 <template>
-  <!-- Grid: katta poster kartalar -->
-  <ul v-if="view === 'grid'" class="grid">
+  <!-- Grid: poster kartalar -->
+  <ul v-if="view === 'grid'" class="grid" :style="gridStyle">
     <li v-for="item in items" :key="item.key" class="card">
       <RouterLink :to="item.to" class="card-link">
         <div class="poster-wrap">
@@ -49,11 +57,8 @@ const SEVERITY: Record<WatchStatus, string> = {
           <i :class="['pi', item.kind === 'movie' ? 'pi-video' : 'pi-desktop']" />
         </div>
 
-        <span class="c-title">
-          {{ item.title }}
-          <span v-if="item.releaseYear" class="t-year muted">· {{ item.releaseYear }}</span>
-        </span>
-
+        <span class="c-title">{{ item.title }}</span>
+        <span class="c-year muted">{{ item.releaseYear ?? '' }}</span>
         <span class="c-watched muted" :title="t('list.watched')">
           <template v-if="item.lastWatchedAt"><i class="pi pi-calendar" /> {{ item.lastWatchedAt }}</template>
         </span>
@@ -81,7 +86,6 @@ const SEVERITY: Record<WatchStatus, string> = {
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
   gap: 1.4rem;
 }
 .card {
@@ -160,7 +164,7 @@ const SEVERITY: Record<WatchStatus, string> = {
 }
 .row-link {
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr) 118px 66px 56px 80px 104px;
+  grid-template-columns: 44px minmax(0, 1fr) 52px 118px 66px 58px 80px 116px;
   align-items: center;
   gap: 0.9rem;
   padding: 0.5rem 0.9rem;
@@ -183,9 +187,7 @@ const SEVERITY: Record<WatchStatus, string> = {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.t-year {
-  font-weight: 400;
-}
+.c-year,
 .c-watched,
 .c-runtime,
 .c-personal,
@@ -197,9 +199,6 @@ const SEVERITY: Record<WatchStatus, string> = {
   white-space: nowrap;
   justify-content: flex-end;
 }
-.c-status {
-  justify-self: end;
-}
 .c-personal {
   color: #f5a623;
   font-weight: 600;
@@ -207,6 +206,14 @@ const SEVERITY: Record<WatchStatus, string> = {
 .c-imdb {
   font-weight: 600;
   color: var(--p-text-color);
+}
+.c-status {
+  display: flex;
+  justify-content: flex-end;
+}
+.c-status :deep(.p-tag) {
+  width: 100%;
+  justify-content: center;
 }
 
 /* --- Shared --- */
@@ -219,19 +226,20 @@ const SEVERITY: Record<WatchStatus, string> = {
   font-size: 0.85rem;
 }
 
-@media (max-width: 820px) {
+@media (max-width: 860px) {
   .row-link {
-    grid-template-columns: 44px minmax(0, 1fr) 56px 80px 104px;
+    grid-template-columns: 44px minmax(0, 1fr) 52px 58px 80px 116px;
   }
   .c-watched,
   .c-runtime {
     display: none;
   }
 }
-@media (max-width: 540px) {
+@media (max-width: 560px) {
   .row-link {
-    grid-template-columns: 44px minmax(0, 1fr) 104px;
+    grid-template-columns: 44px minmax(0, 1fr) 116px;
   }
+  .c-year,
   .c-personal,
   .c-imdb {
     display: none;

@@ -283,7 +283,7 @@ async function onDeleteMovie(): Promise<void> {
   flex-wrap: wrap;
 }
 .poster {
-  width: 220px;
+  width: 290px;
   aspect-ratio: 2 / 3;
   object-fit: cover;
   border-radius: var(--p-border-radius-lg, 12px);

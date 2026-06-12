@@ -9,6 +9,7 @@ interface SerialListParams {
   minRating?: number
   page?: number
   size?: number
+  sort?: string
 }
 
 export function useSerials() {

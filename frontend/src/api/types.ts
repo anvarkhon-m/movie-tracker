@@ -53,6 +53,7 @@ export interface MovieFilterParams {
   minRating?: number
   page?: number
   size?: number
+  sort?: string
 }
 
 // FilterBar komponenti emit qiladigan umumiy filtr (movie + serial).
@@ -210,3 +211,4 @@ export interface CollectionItem {
 }
 
 export type ViewMode = 'grid' | 'list'
+export type GridSize = 's' | 'm' | 'l'
