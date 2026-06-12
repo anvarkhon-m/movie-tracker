@@ -205,6 +205,7 @@ async function onDeleteSerial(): Promise<void> {
             </template>
           </dl>
 
+          <p v-if="serial.overview" class="overview">{{ serial.overview }}</p>
           <p v-if="serial.personalNote" class="note">{{ serial.personalNote }}</p>
 
           <div v-if="!editing" class="actions">
@@ -316,10 +317,7 @@ async function onDeleteSerial(): Promise<void> {
   color: var(--p-text-muted-color);
 }
 .placeholder {
-  background: var(--p-surface-100);
-}
-:global(.app-dark) .placeholder {
-  background: var(--p-surface-800);
+  background: color-mix(in srgb, var(--p-text-color) 8%, transparent);
 }
 .info {
   flex: 1;
@@ -360,6 +358,11 @@ async function onDeleteSerial(): Promise<void> {
   display: flex;
   align-items: center;
   gap: 0.3rem;
+}
+.overview {
+  margin: 0 0 1.2rem;
+  line-height: 1.6;
+  color: var(--p-text-color);
 }
 .note {
   font-style: italic;

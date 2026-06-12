@@ -40,7 +40,7 @@ const SEVERITY: Record<WatchStatus, string> = {
     </li>
   </ul>
 
-  <!-- List: kichik thumbnail + qator -->
+  <!-- List: ustunlarga tekislangan qatorlar -->
   <ul v-else class="list">
     <li v-for="item in items" :key="item.key" class="row">
       <RouterLink :to="item.to" class="row-link">
@@ -48,25 +48,27 @@ const SEVERITY: Record<WatchStatus, string> = {
         <div v-else class="thumb placeholder">
           <i :class="['pi', item.kind === 'movie' ? 'pi-video' : 'pi-desktop']" />
         </div>
-        <div class="row-main">
-          <span class="row-title">{{ item.title }}</span>
-          <span v-if="item.releaseYear" class="muted year">{{ item.releaseYear }}</span>
-        </div>
-        <div class="row-meta">
-          <span v-if="item.lastWatchedAt" class="meta-cell watched" :title="t('list.watched')">
-            <i class="pi pi-calendar" /> {{ item.lastWatchedAt }}
-          </span>
-          <span v-if="item.durationMin" class="meta-cell runtime" :title="t('list.runtime')">
-            <i class="pi pi-clock" /> {{ item.durationMin }}m
-          </span>
-          <span v-if="item.personalRating != null" class="meta-cell personal" :title="t('list.personal')">
-            <i class="pi pi-star-fill" /> {{ item.personalRating }}
-          </span>
-          <span v-if="item.imdbRating != null" class="meta-cell imdb" :title="t('detail.imdb')">
-            IMDb {{ item.imdbRating }}
-          </span>
+
+        <span class="c-title">
+          {{ item.title }}
+          <span v-if="item.releaseYear" class="t-year muted">· {{ item.releaseYear }}</span>
+        </span>
+
+        <span class="c-watched muted" :title="t('list.watched')">
+          <template v-if="item.lastWatchedAt"><i class="pi pi-calendar" /> {{ item.lastWatchedAt }}</template>
+        </span>
+        <span class="c-runtime muted" :title="t('list.runtime')">
+          <template v-if="item.durationMin"><i class="pi pi-clock" /> {{ item.durationMin }}m</template>
+        </span>
+        <span class="c-personal" :title="t('list.personal')">
+          <template v-if="item.personalRating != null"><i class="pi pi-star-fill" /> {{ item.personalRating }}</template>
+        </span>
+        <span class="c-imdb" :title="t('detail.imdb')">
+          <template v-if="item.imdbRating != null">IMDb {{ item.imdbRating }}</template>
+        </span>
+        <span class="c-status">
           <Tag :value="t(`status.${item.status}`)" :severity="SEVERITY[item.status]" />
-        </div>
+        </span>
       </RouterLink>
     </li>
   </ul>
@@ -112,10 +114,7 @@ const SEVERITY: Record<WatchStatus, string> = {
   color: var(--p-text-muted-color);
 }
 .placeholder {
-  background: var(--p-surface-100);
-}
-:global(.app-dark) .placeholder {
-  background: var(--p-surface-800);
+  background: color-mix(in srgb, var(--p-text-color) 8%, transparent);
 }
 .meta {
   padding: 0.7rem 0.8rem 0.85rem;
@@ -141,14 +140,14 @@ const SEVERITY: Record<WatchStatus, string> = {
   font-size: 0.82rem;
 }
 
-/* --- List --- */
+/* --- List (aligned grid) --- */
 .list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.55rem;
 }
 .row {
   background: var(--p-content-background);
@@ -160,10 +159,11 @@ const SEVERITY: Record<WatchStatus, string> = {
   border-color: var(--p-primary-color);
 }
 .row-link {
-  display: flex;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 118px 66px 56px 80px 104px;
   align-items: center;
-  gap: 1rem;
-  padding: 0.5rem 0.8rem;
+  gap: 0.9rem;
+  padding: 0.5rem 0.9rem;
   color: inherit;
 }
 .thumb {
@@ -171,77 +171,69 @@ const SEVERITY: Record<WatchStatus, string> = {
   height: 60px;
   object-fit: cover;
   border-radius: 4px;
-  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--p-text-muted-color);
 }
-.row-main {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-}
-.row-title {
+.c-title {
   font-weight: 600;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.row-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  flex-shrink: 0;
+.t-year {
+  font-weight: 400;
 }
-.meta-cell {
+.c-watched,
+.c-runtime,
+.c-personal,
+.c-imdb {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
   font-size: 0.82rem;
   white-space: nowrap;
+  justify-content: flex-end;
 }
-.watched,
-.runtime,
-.year {
-  color: var(--p-text-muted-color);
+.c-status {
+  justify-self: end;
 }
-.personal {
+.c-personal {
   color: #f5a623;
   font-weight: 600;
 }
-.imdb {
-  color: var(--p-text-color);
+.c-imdb {
   font-weight: 600;
-  background: var(--p-surface-100);
-  padding: 0.1rem 0.4rem;
-  border-radius: 4px;
-}
-:global(.app-dark) .imdb {
-  background: var(--p-surface-800);
+  color: var(--p-text-color);
 }
 
 /* --- Shared --- */
 .muted {
   color: var(--p-text-muted-color);
-  font-size: 0.85rem;
 }
 .rating {
   color: #f5a623;
   font-weight: 600;
   font-size: 0.85rem;
-  flex-shrink: 0;
 }
-@media (max-width: 720px) {
-  .watched,
-  .runtime {
+
+@media (max-width: 820px) {
+  .row-link {
+    grid-template-columns: 44px minmax(0, 1fr) 56px 80px 104px;
+  }
+  .c-watched,
+  .c-runtime {
     display: none;
   }
 }
-@media (max-width: 560px) {
-  .year {
+@media (max-width: 540px) {
+  .row-link {
+    grid-template-columns: 44px minmax(0, 1fr) 104px;
+  }
+  .c-personal,
+  .c-imdb {
     display: none;
   }
 }

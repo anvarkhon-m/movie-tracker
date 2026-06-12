@@ -24,6 +24,7 @@ public record SerialResponse(
         SerialStatus serialStatus,
         WatchStatus watchStatus,
         String personalNote,
+        String overview,
         String posterUrl,
         String language,
         String country,

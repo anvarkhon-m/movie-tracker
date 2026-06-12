@@ -22,6 +22,7 @@ public record MovieResponse(
         int watchCount,
         WatchStatus status,
         String personalNote,
+        String overview,
         String posterUrl,
         String language,
         String country,

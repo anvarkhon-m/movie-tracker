@@ -61,10 +61,7 @@ defineProps<{ items: MediaItem[] }>()
   color: var(--p-text-muted-color);
 }
 .placeholder {
-  background: var(--p-surface-100);
-}
-:global(.app-dark) .placeholder {
-  background: var(--p-surface-800);
+  background: color-mix(in srgb, var(--p-text-color) 8%, transparent);
 }
 .badge {
   position: absolute;

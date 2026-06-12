@@ -185,6 +185,10 @@ async function onDeleteMovie(): Promise<void> {
               <dt>{{ t('detail.personal') }}</dt>
               <dd>⭐ {{ movie.personalRating }}</dd>
             </template>
+            <template v-if="movie.durationMin">
+              <dt>{{ t('detail.runtime') }}</dt>
+              <dd>{{ movie.durationMin }} {{ t('detail.minutes') }}</dd>
+            </template>
             <template v-if="movie.platform">
               <dt>{{ t('detail.platform') }}</dt>
               <dd>{{ movie.platform }}</dd>
@@ -195,6 +199,7 @@ async function onDeleteMovie(): Promise<void> {
             </template>
           </dl>
 
+          <p v-if="movie.overview" class="overview">{{ movie.overview }}</p>
           <p v-if="movie.personalNote" class="note">{{ movie.personalNote }}</p>
 
           <div v-if="!editing" class="actions">
@@ -289,10 +294,7 @@ async function onDeleteMovie(): Promise<void> {
   color: var(--p-text-muted-color);
 }
 .placeholder {
-  background: var(--p-surface-100);
-}
-:global(.app-dark) .placeholder {
-  background: var(--p-surface-800);
+  background: color-mix(in srgb, var(--p-text-color) 8%, transparent);
 }
 .info {
   flex: 1;
@@ -333,6 +335,11 @@ async function onDeleteMovie(): Promise<void> {
   display: flex;
   align-items: center;
   gap: 0.3rem;
+}
+.overview {
+  margin: 0 0 1.2rem;
+  line-height: 1.6;
+  color: var(--p-text-color);
 }
 .note {
   font-style: italic;

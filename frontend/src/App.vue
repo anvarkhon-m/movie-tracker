@@ -81,18 +81,12 @@ const links = [
   transition: background 0.15s, color 0.15s;
 }
 .nav-link:hover {
-  background: var(--p-surface-100);
+  background: color-mix(in srgb, var(--p-text-color) 8%, transparent);
   color: var(--p-text-color);
-}
-:global(.app-dark) .nav-link:hover {
-  background: var(--p-surface-800);
 }
 .nav-link.router-link-active {
   color: var(--p-primary-color);
-  background: var(--p-primary-50);
-}
-:global(.app-dark) .nav-link.router-link-active {
-  background: color-mix(in srgb, var(--p-primary-color) 18%, transparent);
+  background: color-mix(in srgb, var(--p-primary-color) 15%, transparent);
 }
 .nav-link i {
   font-size: 0.95rem;
@@ -104,11 +98,8 @@ const links = [
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: var(--p-surface-100);
+  background: color-mix(in srgb, var(--p-text-color) 10%, transparent);
   color: var(--p-text-color);
-}
-:global(.app-dark) .profile-link {
-  background: var(--p-surface-800);
 }
 .profile-link.router-link-active {
   background: var(--p-primary-color);

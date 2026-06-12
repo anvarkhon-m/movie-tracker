@@ -25,6 +25,7 @@ export interface MovieResponse {
   watchCount: number
   status: WatchStatus
   personalNote: string | null
+  overview: string | null
   posterUrl: string | null
   language: string | null
   country: string | null
@@ -130,6 +131,7 @@ export interface SerialResponse {
   serialStatus: SerialStatus | null
   watchStatus: WatchStatus
   personalNote: string | null
+  overview: string | null
   posterUrl: string | null
   language: string | null
   country: string | null

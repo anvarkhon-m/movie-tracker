@@ -100,6 +100,9 @@ public class Serial {
     @Column(name = "personal_note")
     private String personalNote;
 
+    @Column(columnDefinition = "text")
+    private String overview;
+
     @Column(name = "poster_url")
     private String posterUrl;
 
