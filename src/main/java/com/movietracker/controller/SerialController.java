@@ -49,6 +49,11 @@ public class SerialController {
         return serialService.get(id);
     }
 
+    @GetMapping("/tmdb-ids")
+    public List<Integer> tmdbIds() {
+        return serialService.getLibraryTmdbIds();
+    }
+
     @PutMapping("/{id}")
     public SerialResponse update(@PathVariable Long id, @Valid @RequestBody SerialRequest request) {
         return serialService.update(id, request);

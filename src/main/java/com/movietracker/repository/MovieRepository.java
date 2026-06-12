@@ -18,6 +18,9 @@ public interface MovieRepository extends JpaRepository<Movie, Long>, JpaSpecific
 
     long countByUserId(Long userId);
 
+    @Query("SELECT m.tmdbId FROM Movie m WHERE m.user.id = :userId AND m.tmdbId IS NOT NULL")
+    List<Integer> findTmdbIdsByUserId(@Param("userId") Long userId);
+
     @Query("SELECT m.status AS status, COUNT(m) AS count FROM Movie m "
             + "WHERE m.user.id = :userId GROUP BY m.status")
     List<StatusCount> countGroupedByStatus(@Param("userId") Long userId);

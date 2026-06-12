@@ -49,6 +49,11 @@ public class MovieController {
         return movieService.get(id);
     }
 
+    @GetMapping("/tmdb-ids")
+    public List<Integer> tmdbIds() {
+        return movieService.getLibraryTmdbIds();
+    }
+
     @PutMapping("/{id}")
     public MovieResponse update(@PathVariable Long id, @Valid @RequestBody MovieRequest request) {
         return movieService.update(id, request);

@@ -16,9 +16,10 @@ const { t } = useI18n()
 const { serials, loading, error, totalElements, fetchSerials } = useSerials()
 const settings = useSettingsStore()
 
-const SIZE = 24
+const ALL = 10000
 const filter = ref<ListFilter>({})
 const page = ref(0)
+const pageSize = ref(24)
 const sort = ref('id,desc')
 
 const sortOptions = computed(() => [
@@ -29,7 +30,12 @@ const sortOptions = computed(() => [
   { label: t('sort.imdb'), value: 'imdbRating,desc' },
   { label: t('sort.personal'), value: 'personalRating,desc' },
 ])
-
+const pageSizeOptions = computed(() => [
+  { label: '24', value: 24 },
+  { label: '50', value: 50 },
+  { label: '100', value: 100 },
+  { label: t('page.all'), value: ALL },
+])
 const viewOptions = [
   { value: 'grid', icon: 'pi pi-th-large' },
   { value: 'list', icon: 'pi pi-bars' },
@@ -41,20 +47,19 @@ const sizeOptions: { value: GridSize; icon: string }[] = [
 ]
 
 function load(): void {
-  void fetchSerials({ ...filter.value, page: page.value, size: SIZE, sort: sort.value })
+  void fetchSerials({ ...filter.value, page: page.value, size: pageSize.value, sort: sort.value })
 }
 
 onMounted(load)
 
-function onFilter(f: ListFilter): void {
-  filter.value = f
+function reload(): void {
   page.value = 0
   load()
 }
 
-function onSort(): void {
-  page.value = 0
-  load()
+function onFilter(f: ListFilter): void {
+  filter.value = f
+  reload()
 }
 
 function onPage(e: { page: number }): void {
@@ -84,16 +89,9 @@ const items = computed<CollectionItem[]>(() =>
     <div class="head">
       <h1>{{ t('serials.title') }}</h1>
       <div class="controls">
-        <Select
-          v-model="sort"
-          :options="sortOptions"
-          option-label="label"
-          option-value="value"
-          class="sort"
-          @change="onSort"
-        />
+        <Select v-model="sort" :options="sortOptions" option-label="label" option-value="value" class="sort" @change="reload" />
+        <Select v-model="pageSize" :options="pageSizeOptions" option-label="label" option-value="value" class="psize" @change="reload" />
         <SelectButton
-          v-if="settings.view === 'grid'"
           :model-value="settings.gridSize"
           :options="sizeOptions"
           option-value="value"
@@ -121,12 +119,12 @@ const items = computed<CollectionItem[]>(() =>
     <Message v-else-if="items.length === 0" severity="secondary">{{ t('serials.empty') }}</Message>
 
     <template v-else>
-      <MediaCollection :items="items" :view="settings.view" :min-col="settings.gridMinWidth" />
+      <MediaCollection :items="items" :view="settings.view" :size="settings.gridSize" />
       <Paginator
-        v-if="totalElements > SIZE"
-        :rows="SIZE"
+        v-if="totalElements > pageSize"
+        :rows="pageSize"
         :total-records="totalElements"
-        :first="page * SIZE"
+        :first="page * pageSize"
         class="pager"
         @page="onPage"
       />
@@ -155,7 +153,10 @@ const items = computed<CollectionItem[]>(() =>
   flex-wrap: wrap;
 }
 .sort {
-  min-width: 180px;
+  min-width: 170px;
+}
+.psize {
+  min-width: 90px;
 }
 h1 {
   font-size: 1.6rem;

@@ -72,7 +72,9 @@ const messages = {
       added: 'Qo\'shildi ✓',
       empty: 'Hech narsa topilmadi',
       hint: 'Qidiruvni boshlang',
+      inLibrary: 'Kutubxonada',
     },
+    page: { all: 'Hammasi' },
     detail: {
       back: '← Kinolar',
       director: 'Rejissor',
@@ -220,7 +222,9 @@ const messages = {
       added: 'Добавлено ✓',
       empty: 'Ничего не найдено',
       hint: 'Начните поиск',
+      inLibrary: 'В библиотеке',
     },
+    page: { all: 'Все' },
     detail: {
       back: '← Фильмы',
       director: 'Режиссёр',
@@ -368,7 +372,9 @@ const messages = {
       added: 'Added ✓',
       empty: 'Nothing found',
       hint: 'Start a search',
+      inLibrary: 'In library',
     },
+    page: { all: 'All' },
     detail: {
       back: '← Movies',
       director: 'Director',

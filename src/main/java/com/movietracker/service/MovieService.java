@@ -55,6 +55,11 @@ public class MovieService {
         return movieMapper.toResponse(findOwned(id));
     }
 
+    @Transactional(readOnly = true)
+    public List<Integer> getLibraryTmdbIds() {
+        return movieRepository.findTmdbIdsByUserId(authService.currentUserId());
+    }
+
     @Transactional
     public MovieResponse create(MovieRequest request) {
         User user = authService.getCurrentUser();

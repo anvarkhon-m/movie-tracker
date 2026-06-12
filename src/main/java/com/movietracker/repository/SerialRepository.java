@@ -17,6 +17,9 @@ public interface SerialRepository extends JpaRepository<Serial, Long>, JpaSpecif
 
     long countByUserId(Long userId);
 
+    @Query("SELECT s.tmdbId FROM Serial s WHERE s.user.id = :userId AND s.tmdbId IS NOT NULL")
+    List<Integer> findTmdbIdsByUserId(@Param("userId") Long userId);
+
     @Query("SELECT s.watchStatus AS status, COUNT(s) AS count FROM Serial s "
             + "WHERE s.user.id = :userId GROUP BY s.watchStatus")
     List<StatusCount> countGroupedByStatus(@Param("userId") Long userId);

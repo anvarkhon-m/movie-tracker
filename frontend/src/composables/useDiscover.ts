@@ -7,7 +7,7 @@ const SEARCH_PATH: Record<DiscoverType, string> = {
   serial: '/tmdb/search/serials',
 }
 
-const ADD_PATH: Record<DiscoverType, string> = {
+const BASE_PATH: Record<DiscoverType, string> = {
   movie: '/movies',
   serial: '/serials',
 }
@@ -20,6 +20,21 @@ export function useDiscover() {
 
   const addingId = ref<number | null>(null)
   const addedIds = ref<Set<number>>(new Set())
+  // Avval qo'shilganlar (oldingi sessiyalarda) — backend dan.
+  const inLibrary = ref<Set<number>>(new Set())
+
+  async function loadLibrary(type: DiscoverType): Promise<void> {
+    try {
+      const { data } = await client.get<number[]>(`${BASE_PATH[type]}/tmdb-ids`)
+      inLibrary.value = new Set(data)
+    } catch {
+      inLibrary.value = new Set()
+    }
+  }
+
+  function isAdded(tmdbId: number): boolean {
+    return inLibrary.value.has(tmdbId) || addedIds.value.has(tmdbId)
+  }
 
   async function search(type: DiscoverType, query: string): Promise<void> {
     if (!query.trim()) return
@@ -28,9 +43,10 @@ export function useDiscover() {
     searched.value = true
     addedIds.value = new Set()
     try {
-      const { data } = await client.get<TmdbSummary[]>(SEARCH_PATH[type], {
-        params: { query },
-      })
+      const [{ data }] = await Promise.all([
+        client.get<TmdbSummary[]>(SEARCH_PATH[type], { params: { query } }),
+        loadLibrary(type),
+      ])
       results.value = data
     } catch (e) {
       error.value = e instanceof Error ? e.message : 'error'
@@ -44,7 +60,7 @@ export function useDiscover() {
     addingId.value = tmdbId
     error.value = null
     try {
-      await client.post(ADD_PATH[type], { tmdbId })
+      await client.post(BASE_PATH[type], { tmdbId })
       addedIds.value.add(tmdbId)
     } catch (e) {
       error.value = e instanceof Error ? e.message : 'error'
@@ -53,5 +69,5 @@ export function useDiscover() {
     }
   }
 
-  return { results, loading, error, searched, addingId, addedIds, search, add }
+  return { results, loading, error, searched, addingId, addedIds, isAdded, search, add }
 }

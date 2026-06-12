@@ -2,12 +2,9 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Tag from 'primevue/tag'
-import type { CollectionItem, ViewMode, WatchStatus } from '@/api/types'
+import type { CollectionItem, GridSize, ViewMode, WatchStatus } from '@/api/types'
 
-const props = withDefaults(
-  defineProps<{ items: CollectionItem[]; view: ViewMode; minCol?: number }>(),
-  { minCol: 168 },
-)
+const props = defineProps<{ items: CollectionItem[]; view: ViewMode; size: GridSize }>()
 
 const { t } = useI18n()
 
@@ -18,8 +15,10 @@ const SEVERITY: Record<WatchStatus, string> = {
   DROPPED: 'danger',
 }
 
+const GRID_MIN: Record<GridSize, number> = { s: 130, m: 168, l: 210 }
+
 const gridStyle = computed(() => ({
-  gridTemplateColumns: `repeat(auto-fill, minmax(${props.minCol}px, 1fr))`,
+  gridTemplateColumns: `repeat(auto-fill, minmax(${GRID_MIN[props.size]}px, 1fr))`,
 }))
 </script>
 
@@ -49,7 +48,7 @@ const gridStyle = computed(() => ({
   </ul>
 
   <!-- List: ustunlarga tekislangan qatorlar -->
-  <ul v-else class="list">
+  <ul v-else class="list" :class="`scale-${size}`">
     <li v-for="item in items" :key="item.key" class="row">
       <RouterLink :to="item.to" class="row-link">
         <img v-if="item.posterUrl" :src="item.posterUrl" :alt="item.title" class="thumb" />
@@ -164,7 +163,7 @@ const gridStyle = computed(() => ({
 }
 .row-link {
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr) 52px 118px 66px 58px 80px 116px;
+  grid-template-columns: var(--thumb, 44px) minmax(0, 1fr) 52px 118px 66px 58px 80px 116px;
   align-items: center;
   gap: 0.9rem;
   padding: 0.5rem 0.9rem;
@@ -179,6 +178,27 @@ const gridStyle = computed(() => ({
   align-items: center;
   justify-content: center;
   color: var(--p-text-muted-color);
+}
+
+/* Scale: small = no poster (compact), large = bigger poster */
+.scale-s {
+  --thumb: 0px;
+}
+.scale-s .thumb {
+  display: none;
+}
+.scale-s .row-link {
+  padding: 0.35rem 0.9rem;
+}
+.scale-l {
+  --thumb: 60px;
+}
+.scale-l .thumb {
+  width: 56px;
+  height: 84px;
+}
+.scale-l .row-link {
+  padding: 0.6rem 0.9rem;
 }
 .c-title {
   font-weight: 600;
@@ -228,7 +248,7 @@ const gridStyle = computed(() => ({
 
 @media (max-width: 860px) {
   .row-link {
-    grid-template-columns: 44px minmax(0, 1fr) 52px 58px 80px 116px;
+    grid-template-columns: var(--thumb, 44px) minmax(0, 1fr) 52px 58px 80px 116px;
   }
   .c-watched,
   .c-runtime {
@@ -237,7 +257,7 @@ const gridStyle = computed(() => ({
 }
 @media (max-width: 560px) {
   .row-link {
-    grid-template-columns: 44px minmax(0, 1fr) 116px;
+    grid-template-columns: var(--thumb, 44px) minmax(0, 1fr) 116px;
   }
   .c-year,
   .c-personal,

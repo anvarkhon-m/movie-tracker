@@ -57,6 +57,11 @@ public class SerialService {
         return serialMapper.toResponse(findOwned(id));
     }
 
+    @Transactional(readOnly = true)
+    public List<Integer> getLibraryTmdbIds() {
+        return serialRepository.findTmdbIdsByUserId(authService.currentUserId());
+    }
+
     @Transactional
     public SerialResponse create(SerialRequest request) {
         User user = authService.getCurrentUser();

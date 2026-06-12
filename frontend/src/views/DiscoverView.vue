@@ -12,7 +12,7 @@ import Message from 'primevue/message'
 import type { DiscoverType } from '@/api/types'
 
 const { t } = useI18n()
-const { results, loading, error, searched, addingId, addedIds, search, add } = useDiscover()
+const { results, loading, error, searched, addingId, isAdded, search, add } = useDiscover()
 
 const type = ref<DiscoverType>('movie')
 const query = ref('')
@@ -59,11 +59,12 @@ function switchType(): void {
     <Message v-else-if="results.length === 0" severity="secondary">{{ t('discover.empty') }}</Message>
 
     <ul v-else class="grid">
-      <li v-for="item in results" :key="item.tmdbId" class="card">
+      <li v-for="item in results" :key="item.tmdbId" class="card" :class="{ owned: isAdded(item.tmdbId) }">
         <div class="poster-wrap">
           <img v-if="item.posterUrl" :src="item.posterUrl" :alt="item.title" class="poster" />
           <div v-else class="poster placeholder"><i class="pi pi-image" /></div>
           <span v-if="item.rating != null" class="badge"><i class="pi pi-star-fill" /> {{ item.rating }}</span>
+          <span v-if="isAdded(item.tmdbId)" class="owned-badge"><i class="pi pi-check" /> {{ t('discover.inLibrary') }}</span>
         </div>
         <div class="meta">
           <span class="title">{{ item.title }}</span>
@@ -71,10 +72,10 @@ function switchType(): void {
           <Button
             class="add"
             size="small"
-            :disabled="addingId === item.tmdbId || addedIds.has(item.tmdbId)"
-            :severity="addedIds.has(item.tmdbId) ? 'success' : 'primary'"
-            :icon="addedIds.has(item.tmdbId) ? 'pi pi-check' : 'pi pi-plus'"
-            :label="addedIds.has(item.tmdbId) ? t('discover.added') : addingId === item.tmdbId ? t('discover.adding') : t('discover.add')"
+            :disabled="addingId === item.tmdbId || isAdded(item.tmdbId)"
+            :severity="isAdded(item.tmdbId) ? 'success' : 'primary'"
+            :icon="isAdded(item.tmdbId) ? 'pi pi-check' : 'pi pi-plus'"
+            :label="isAdded(item.tmdbId) ? t('discover.added') : addingId === item.tmdbId ? t('discover.adding') : t('discover.add')"
             @click="add(type, item.tmdbId)"
           />
         </div>
@@ -157,6 +158,26 @@ h1 {
   border-radius: 6px;
   font-size: 0.78rem;
   font-weight: 600;
+}
+.owned {
+  border-color: var(--p-green-500, #22c55e);
+}
+.owned-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--p-green-500, #22c55e);
+  color: #fff;
+  padding: 0.12rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+.owned .poster {
+  opacity: 0.55;
 }
 .meta {
   padding: 0.7rem 0.8rem;
