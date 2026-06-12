@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -34,14 +35,15 @@ class StatsQueriesTest {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private JdbcTemplate jdbc;
 
     private Long userId;
 
     @BeforeEach
     void setUp() {
-        serialRepository.deleteAll();
-        movieRepository.deleteAll();
-        userRepository.deleteAll();
+        jdbc.execute("TRUNCATE TABLE episode_watch_history, movie_watch_history, episode, "
+                + "movie, serial, users RESTART IDENTITY CASCADE");
 
         User user = userRepository.save(User.builder()
                 .googleId("stats-test").email("stats@test.dev").name("Stats").build());

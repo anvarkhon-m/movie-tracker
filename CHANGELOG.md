@@ -215,6 +215,19 @@
 - Factory lar TMDB tilidan to'ldirmaydi; detail edit formaga "Ko'rilgan til" maydoni qo'shildi
 - Facts da ko'rsatiladi; i18n (uz/ru/en)
 
+## 2026-06-12 — Session 11: Backend testlar
+
+### Qilinganlar
+- **Domain unit testlar** (Movie/Serial/Episode): markAsWatched, recordWatch,
+  drop guard, rate validatsiya, duplicate epizod, belongsTo — 11 ta
+- **Service integration testlar** (Testcontainers + @MockitoBean TMDB/MinIO):
+  - MovieService: manual va TMDB create, **ownership isolation** (boshqa user ko'ra olmaydi),
+    watch history → status, status filter — 5 ta
+  - SerialService: epizod qo'shish/duplicate, ownership — 2 ta
+  - AuthService: yangi user, googleId bo'yicha topish, **email bo'yicha account linking** — 3 ta
+- Test izolyatsiyasi: har testdan oldin JdbcTemplate bilan TRUNCATE CASCADE
+- Jami **27 test** — BUILD SUCCESS
+
 ## 2026-06-11 — Session 9: PrimeVue Aura redesign
 
 ### Qilinganlar
